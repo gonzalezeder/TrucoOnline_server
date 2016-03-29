@@ -2,8 +2,6 @@ package entities;
 
 import java.io.Serializable;
 
-import org.hibernate.annotations.Entity;
-
 public class Jugador implements Serializable{
 
 	/**
