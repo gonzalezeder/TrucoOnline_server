@@ -7,7 +7,19 @@ public class Carta {
 	private int numero;
 	private String palo;
 	private int valorEnvido;
+	private static int ultNum;
 
+	public Carta(int numero, String palo, int env){
+		this.idCarta = getUltNum();
+		this.numero = numero;
+		this.palo = palo;
+		this.valorEnvido = env;
+	}
+	
+	private int getUltNum(){
+		return ultNum++;
+	}
+	
 	public int getIdCarta() {
 		return idCarta;
 	}
@@ -32,6 +44,7 @@ public class Carta {
 	public void setValorEnvido(int valorEnvido) {
 		this.valorEnvido = valorEnvido;
 	}
+	
 
 	
 }
