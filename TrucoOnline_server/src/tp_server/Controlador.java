@@ -80,6 +80,12 @@ public class Controlador {
 		
 	}
 	
+	public void salirLobby(int idJugador){
+		Jugador j = buscarJugadorPorId(idJugador);
+		if(j!=null)
+			Lobby.getInstancia().salir(j);
+	}
+	
 	private Jugador buscarJugadorPorId(int idJugador) {
 		for(Jugador j: jugadores)
 			if(j.getIdJugador()==idJugador)
@@ -95,8 +101,10 @@ public class Controlador {
 		return jugs;
 	}
 	
-	public void jugarTruco(int idJugador, int tipoModalidad){
-		
+	public void jugarTrucoIndividual(int idJugador){
+		Jugador j = buscarJugadorPorId(idJugador);
+		if(j!=null)
+			Lobby.getInstancia().jugarIndividual(j);
 		
 	}
 	

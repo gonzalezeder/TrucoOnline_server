@@ -14,6 +14,10 @@ public class Main {
 		Controlador.getInstancia().entrarLobby(1);
 		Controlador.getInstancia().entrarLobby(2);
 		Controlador.getInstancia().verJugadoresOnline();
+	//	Controlador.getInstancia().salirLobby(2);
+	//	Controlador.getInstancia().verJugadoresOnline();
+		
+		
 		
 	}
 

@@ -21,9 +21,7 @@ public class Carta {
 	
 	
 	
-	public void mezclar() {
-		
-	}
+	
 	
 	
 	
