@@ -14,6 +14,34 @@ public class Jugador implements Serializable{
 	private String password;
 	private Categoria categoria;
 	private Estadistica estadistica;
+	private static int ultNum=1;
+	
+	
+	public Jugador (String apodo, String mail, String password){
+		this.idJugador = getUltNum();
+		this.apodo = apodo;
+		this.mail = mail;
+		this.password = password;
+		this.categoria = Categoria.NOVATO;
+		this.estadistica = new Estadistica();
+		
+	}
+	
+	private int getUltNum(){
+		return ultNum++;
+	}
+
+	
+
+
+
+	
+
+
+
+
+
+
 
 	public Estadistica getEstadistica() {
 		return estadistica;

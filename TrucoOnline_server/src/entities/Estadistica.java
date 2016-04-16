@@ -7,7 +7,15 @@ public class Estadistica {
 	private int partidasGanadas;
 	private int partidasPerdidas;
 	private int puntaje;
-
+	
+	public Estadistica (){
+		
+		this.partidasJugadas = 0;
+		this.partidasGanadas = 0;
+		this.partidasPerdidas = 0;
+		this.puntaje = 0;
+	}
+	
 	public int getIdEstadistica() {
 		return idEstadistica;
 	}

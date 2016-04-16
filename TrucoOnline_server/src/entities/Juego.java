@@ -12,8 +12,9 @@ public class Juego {
 	private Pareja equipo2;
 	private int estado; //1 Creada, 2 En curso, 3 Terminada
 	private List<Partida> partidas;
-	private static int ultNum;
+	private static int ultNum=1;
 	private Mazo mazo;
+	private Modalidad modalidad;
 	
 	
 	// Recordar para formatear la fecha!! SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -159,6 +160,14 @@ public class Juego {
 
 	public void setPartidas(List<Partida> partidas) {
 		this.partidas = partidas;
+	}
+
+	public Modalidad getModalidad() {
+		return modalidad;
+	}
+
+	public void setModalidad(Modalidad modalidad) {
+		this.modalidad = modalidad;
 	}
 	
 }

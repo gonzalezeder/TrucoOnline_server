@@ -16,6 +16,18 @@ public class Carta {
 		this.valorEnvido = env;
 	}
 	
+	
+	
+	
+	
+	
+	public void mezclar() {
+		
+	}
+	
+	
+	
+	
 	private int getUltNum(){
 		return ultNum++;
 	}
