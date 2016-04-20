@@ -47,7 +47,7 @@ public class Juego {
 		}		
 	}
 	
-	public void repartirCartas(Mazo m){
+	public void repartirCartas(){
 		
 		Partida p = buscarPartidaEnCurso();
 		if(p==null){ //no hay partida en curso. Se crea una.
@@ -102,16 +102,29 @@ public class Juego {
 		return null;
 	}
 	
-	public List<Carta> verCartas(Jugador jug){
+	public List<Carta> verCartas(int idJugador){
 		Partida p = buscarPartidaEnCurso();
+		Jugador j = buscarJug(idJugador);
 		if (p!=null)
-			if(equipo1.pertenece(jug) || equipo2.pertenece(jug))
-				return p.verCartas(jug);
+			if(j!= null)
+				return p.verCartas(j);
 			else
 				System.out.println("El jugador no pertenece a la partida");
 		return null;
 	}
 	
+	private Jugador buscarJug(int idJugador) {
+		if(equipo1.getJugador1().getIdJugador()==idJugador)
+			return equipo1.getJugador1();
+		if(equipo1.getJugador2().getIdJugador()==idJugador)
+			return equipo1.getJugador2();
+		if(equipo2.getJugador1().getIdJugador()==idJugador)
+			return equipo2.getJugador1();
+		if(equipo2.getJugador2().getIdJugador()==idJugador)
+			return equipo2.getJugador2();
+		return null;
+	}
+
 	//Getters y Setters
 	
 	public int getIdJuego() {
@@ -169,5 +182,7 @@ public class Juego {
 	public void setModalidad(Modalidad modalidad) {
 		this.modalidad = modalidad;
 	}
+
+	
 	
 }

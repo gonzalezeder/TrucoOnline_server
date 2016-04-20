@@ -108,10 +108,14 @@ public class Lobby {
 				sacarJugadorLibreIndividual(eq1.getJugador2());
 				sacarJugadorLibreIndividual(eq2.getJugador1());
 				sacarJugadorLibreIndividual(eq2.getJugador2());
+				j.iniciarPartida();
+				j.repartirCartas();
 				juegos.add(j);
+				
 			}
-			
 		}
+
+	
 		
 		
 		/* VER BIEN EL ALGORITMO PARA CREAR PARTIDAS SEGUN CATEGORIA..
@@ -138,6 +142,14 @@ public class Lobby {
 		
 	}
 	*/
+	public List<Carta> verCartas(int idJuego, int idJugador) {
+		for(Juego j: juegos){
+			if(j.getIdJuego()==idJuego)
+				return j.verCartas(idJugador);
+		}
+		return null;
+	}
+	
 	
 	
 	

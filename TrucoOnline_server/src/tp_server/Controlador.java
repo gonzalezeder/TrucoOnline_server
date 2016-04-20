@@ -3,6 +3,7 @@ package tp_server;
 import java.util.ArrayList;
 import java.util.List;
 
+import entities.Carta;
 import entities.Categoria;
 import entities.Juego;
 import entities.Jugador;
@@ -105,6 +106,27 @@ public class Controlador {
 		Jugador j = buscarJugadorPorId(idJugador);
 		if(j!=null)
 			Lobby.getInstancia().jugarIndividual(j);
+		
+	}
+	
+	public void verCartasJugador(int idJuego, int idJugador){
+		List<Carta> cartas =  Lobby.getInstancia().verCartas(idJuego, idJugador);
+		int i = 1;
+		if(cartas !=null){
+			System.out.println("\nCartas del jugador "+idJugador);
+			for(Carta c: cartas){
+				System.out.println("Carta "+i+": "+c.getNumero()+" de "+c.getPalo());
+				i++;
+			}
+		}
+		else
+			System.out.println("Ocurrió un error al repartir");
+	}
+	public void crearJuegos() {
+		Lobby.getInstancia().crearJuegosIndividuales();
+	}
+	public void jugarCarta(int idJuego, int jugador, int carta) {
+		// TODO Auto-generated method stub
 		
 	}
 	

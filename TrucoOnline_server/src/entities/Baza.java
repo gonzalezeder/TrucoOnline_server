@@ -15,6 +15,7 @@ public class Baza {
 		this.manos = new ArrayList<Mano>();
 		this.puntos = new ArrayList<DetallePunto>();
 		this.cantosRealizados = new ArrayList<Canto>();
+		this.manosJugadores = new ArrayList<ManoJugador>();
 		this.estado = 1;
 		this.jugMano = mano;
 	}
