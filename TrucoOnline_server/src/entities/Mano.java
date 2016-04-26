@@ -35,5 +35,12 @@ public class Mano {
 		}
 		return cartasJugadas; //Devuelvo la cantidad de cartas jugadas
 	}
+
+	public void jugar(Jugador j, Carta c) {
+		Movimiento m = new Movimiento(j, null, c, -1);
+		movimientos.add(m);
+		
+		
+	}
 	
 }

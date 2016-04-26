@@ -126,7 +126,7 @@ public class Controlador {
 		Lobby.getInstancia().crearJuegosIndividuales();
 	}
 	public void jugarCarta(int idJuego, int jugador, int carta) {
-		// TODO Auto-generated method stub
+		Lobby.getInstancia().jugarCarta(idJuego, jugador, carta);
 		
 	}
 	

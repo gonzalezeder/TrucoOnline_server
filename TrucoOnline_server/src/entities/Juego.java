@@ -183,6 +183,41 @@ public class Juego {
 		this.modalidad = modalidad;
 	}
 
+	public boolean controlarJugCartaTurno(int jugador, int carta) {
+		Jugador j = buscarJug(jugador);
+		if(j!=null)
+			if(comprobarCarta(j, carta))
+				return true;
+		return false;
+	}
+
+	private boolean comprobarCarta(Jugador j, int carta) {
+		Partida p = buscarPartidaEnCurso();
+		if(p!=null){
+			Baza b = p.buscarBazaEnCurso();
+			if(b !=null)
+				if(b.verificarCarta(j, carta))
+					return true;	
+		}
+		return false;
+	}
+
+	public void jugarCarta(int jugador, int carta) {
+		Jugador j= buscarJug(jugador);
+		if(j!=null){
+			Partida p = buscarPartidaEnCurso();
+			if(p!=null){
+				Baza b = p.buscarBazaEnCurso();
+				if(b !=null)
+					b.jugarCarta(j, carta);
+			}
+		}
+			
+			
+		
+		
+	}
+
 	
 	
 }

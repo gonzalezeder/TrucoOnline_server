@@ -6,11 +6,11 @@ public class Movimiento {
 	private Carta carta;
 	private int envido;
 	
-	public Movimiento (Jugador jug, Canto canto, Carta carta){
+	public Movimiento (Jugador jug, Canto canto, Carta carta,int envido){
 		this.setJugador(jug);
 		this.setCanto(canto);
 		this.setCarta(carta);
-		this.setEnvido(-1);
+		this.setEnvido(envido);
 	}
 
 	

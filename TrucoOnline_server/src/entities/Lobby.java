@@ -149,6 +149,25 @@ public class Lobby {
 		}
 		return null;
 	}
+
+	public void jugarCarta(int idJuego, int jugador, int carta) {
+		Juego j = buscarJuego(idJuego);
+		if (j!=null){
+			if(j.controlarJugCartaTurno(jugador, carta))
+				j.jugarCarta(jugador,carta);
+			else
+				System.out.println("Hay una error en la relación carta/jugador");
+				
+		}
+			
+	}
+
+	private Juego buscarJuego(int idJuego) {
+		for(Juego j: juegos)
+			if (j.getIdJuego()==idJuego)
+				return j;
+		return null;
+	}
 	
 	
 	

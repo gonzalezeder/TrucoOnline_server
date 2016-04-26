@@ -116,6 +116,43 @@ public class Baza {
 		this.jugMano = jugMano;
 	}
 
+	public boolean verificarCarta(Jugador j, int carta) {
+		for(ManoJugador mj: manosJugadores)
+			if(mj.getJugador().getIdJugador()== j.getIdJugador())
+				if(mj.existeCarta(carta)&&mj.cartaNoJugada(carta))
+					return true;
+		return false;
+	}
+
+	public void jugarCarta(Jugador j, int carta) {
+		for(ManoJugador mj: manosJugadores){
+			if(mj.getJugador().getIdJugador()==j.getIdJugador()){
+				int i = manosJugadores.indexOf(mj);
+				Carta c = mj.jugarCarta(carta);
+				if(c!=null){
+					manosJugadores.set(i, mj);
+					Mano m = buscarManoActiva();
+					if(m!=null){
+						int aux = manos.indexOf(m);
+						m.jugar(j,c);
+						manos.set(aux, m);
+						
+					}
+				}
+				
+			}
+				
+		}
+		
+	}
+
+	private Mano buscarManoActiva() {
+		for(Mano mano: manos)
+			if(mano.getEstado()==1)
+				return mano;
+		return null;
+	}
+
 	
 
 	

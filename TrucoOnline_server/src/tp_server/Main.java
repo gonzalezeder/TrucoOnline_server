@@ -29,7 +29,7 @@ public class Main {
 		Controlador.getInstancia().verCartasJugador(1, 2);
 		Controlador.getInstancia().verCartasJugador(1, 3);
 		Controlador.getInstancia().verCartasJugador(1, 4);
-		Controlador.getInstancia().jugarCarta(1, 1, 1); //id Juego, idJugador, idCarta
+	//	Controlador.getInstancia().jugarCarta(1, 1, 1); //id Juego, idJugador, idCarta
 		
 		
 		
