@@ -3,7 +3,7 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Baza {
+public class Baza { // aa
 	private int estado; //1 En curso, 2 Finalizada
 	private List<Mano> manos;
 	private List<DetallePunto> puntos;
