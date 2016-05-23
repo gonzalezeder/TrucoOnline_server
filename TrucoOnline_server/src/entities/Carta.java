@@ -17,15 +17,6 @@ public class Carta {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	private int getUltNum(){
 		return ultNum++;
 	}
