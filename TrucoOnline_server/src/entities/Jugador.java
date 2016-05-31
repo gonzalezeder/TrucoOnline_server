@@ -2,18 +2,47 @@ package entities;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+@Entity
+@Table(name="jugadores")
 public class Jugador implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	private String mail;
-	private String apodo;
+	
+	@Id
+	@GeneratedValue(strategy= GenerationType.AUTO)
 	private int idJugador;
+	
+	@Column(name = "mail", nullable=false, length = 50)
+	private String mail;
+	
+	@Column(name = "apodo", nullable=false, length = 50)
+	private String apodo;
+	
+	@Column(name = "password", nullable=false, length = 50)
 	private String password;
+	
+
 	private Categoria categoria;
+	
+	
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idEstadistica", referencedColumnName = "idEstadistica")
 	private Estadistica estadistica;
+	
+	
+	
 	private static int ultNum=1;
 	
 	
@@ -31,17 +60,6 @@ public class Jugador implements Serializable{
 		return ultNum++;
 	}
 
-	
-
-
-
-	
-
-
-
-
-
-
 
 	public Estadistica getEstadistica() {
 		return estadistica;
@@ -50,7 +68,8 @@ public class Jugador implements Serializable{
 	public void setEstadistica(Estadistica estadistica) {
 		this.estadistica = estadistica;
 	}
-
+	@Enumerated(EnumType.STRING)
+	@Column(name="categoria", nullable=false)
 	public Categoria getCategoria() {
 		return categoria;
 	}

@@ -1,16 +1,42 @@
-//pruebaa
+//prueba
 
 package entities;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+@Entity
+@Table(name = "bazas")
 public class Baza { // aa
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int idBaza;
 	private int estado; //1 En curso, 2 Finalizada
+	
+	@OneToMany(cascade= CascadeType.ALL)
+	@JoinColumn(name = "idBaza")
 	private List<Mano> manos;
+	
+	@OneToMany(cascade= CascadeType.ALL)
+	@JoinColumn(name = "idBaza")
 	private List<DetallePunto> puntos;
+	
+	@OneToMany(cascade= CascadeType.ALL)
+	@JoinColumn(name = "idBaza")
 	private List<Canto> cantosRealizados;
+	
+	@OneToMany(cascade= CascadeType.ALL)
+	@JoinColumn(name = "idBaza")
 	private List<ManoJugador> manosJugadores;
+	
 	private int jugMano;
 	
 	public Baza (int mano){

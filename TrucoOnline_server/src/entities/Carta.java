@@ -1,12 +1,29 @@
 package entities;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "cartas")
 public class Carta {
 
-	
+	@Id
+	@GeneratedValue (strategy = GenerationType.AUTO)
 	private int idCarta;
+	
+	@Column(name = "numero", nullable=false, columnDefinition = "int")
 	private int numero;
+	
+	@Column(name = "palo", nullable=false, length = 10)
 	private String palo;
+	
+	@Column(name = "valorEnvido", nullable=false, columnDefinition = "int")
 	private int valorEnvido;
+	
 	private static int ultNum;
 
 	public Carta(int numero, String palo, int env){

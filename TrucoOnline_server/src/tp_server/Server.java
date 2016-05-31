@@ -5,7 +5,7 @@ import interfaces.TDAManejoDatos;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 
-import entities.GestionJugadores;
+
 
 
 
@@ -25,8 +25,8 @@ public class Server {
     public void iniciar() {
     	try {
     		LocateRegistry.createRegistry(1099);	
-            TDAManejoDatos gestionJugadores = new GestionJugadores();
-            Naming.rebind ("//localhost/GestionJugadores", gestionJugadores);
+            //TDAManejoDatos gestionJugadores = new GestionJugadores();
+           // Naming.rebind ("//localhost/GestionJugadores", gestionJugadores);
             System.out.println("Fijado en //localhost/GestionJugadores");
 		} catch (Exception e) {
 			e.printStackTrace();

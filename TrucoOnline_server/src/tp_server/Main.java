@@ -1,11 +1,14 @@
 package tp_server;
 
+import hibernate.test;
+
 public class Main {
 
 	
 	public static void main(String[] args) {
 		Controlador.getInstancia();
-			
+		
+		
 	//	Controlador.getInstancia().imprimirCategorias();
 		Controlador.getInstancia().altaJugador("Nicolas","Nicolas@gmail.com","contraseña");
 		Controlador.getInstancia().altaJugador("Santiago","Santiago@gmail.com","contraseña");
@@ -31,9 +34,11 @@ public class Main {
 		Controlador.getInstancia().verCartasJugador(1, 4);
 	//	Controlador.getInstancia().jugarCarta(1, 1, 1); //id Juego, idJugador, idCarta
 		
-		
+		test aTest = new test();
+		aTest.prueba();
 		
 	}
+	
 
 	
 }

@@ -1,8 +1,29 @@
 package entities;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table (name = "parejas")
 public class Pareja {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int idPareja;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "jugador1", referencedColumnName = "idJugador")
 	private Jugador jugador1;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "jugador2", referencedColumnName = "idJugador")
 	private Jugador jugador2;
+	
 	
 	public Pareja (Jugador j1, Jugador j2){
 		this.jugador1 = j1;

@@ -4,9 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "partidas")
 public class Partida {
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int idPartida;
+	@OneToMany(cascade= CascadeType.ALL)
+	@JoinColumn(name = "idPartida")
 	private List<Baza> bazas;
 	private int estado; // 1 En Curso, 2 Finalizada
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "parejaGanadora")
 	private Pareja parejaGanadora;
 	private int jugMano;
 	

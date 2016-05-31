@@ -61,6 +61,13 @@ public class GestionJugadores extends UnicastRemoteObject implements TDAManejoDa
 	public int cantidadJugadores() throws RemoteException {
 		return jugadores.size();
 	}
+
+	@Override
+	public boolean validarLogin(String usuario, String password)
+			throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	
 }

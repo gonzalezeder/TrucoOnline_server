@@ -5,15 +5,47 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.apache.commons.collections.functors.FalsePredicate;
+@Entity
+@Table(name ="juegos")
 public class Juego {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int idJuego;
+	
+	@Column(name="fechaJuego", columnDefinition = "Date", nullable = false)
 	private Date fechaJuego;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "equipo1")
 	private Pareja equipo1;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "equipo2", referencedColumnName = "idPareja")
 	private Pareja equipo2;
+	
 	private int estado; //1 Creada, 2 En curso, 3 Terminada
+	@OneToMany(cascade= CascadeType.ALL)
+	@JoinColumn(name = "idJuego")
 	private List<Partida> partidas;
+	
 	private static int ultNum=1;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idMazo", referencedColumnName = "idMazo")
 	private Mazo mazo;
+	
 	private Modalidad modalidad;
 	
 	

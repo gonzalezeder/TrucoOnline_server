@@ -1,11 +1,29 @@
 package entities;
 
-public class Estadistica {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "estadisticas")
+public class Estadistica {
+	@Id
+	@GeneratedValue(strategy= GenerationType.AUTO)
 	private int idEstadistica;
+	
+	@Column(name = "partidasJugadas", nullable=false, columnDefinition = "int")
 	private int partidasJugadas;
+	
+	@Column(name = "partidasGanadas", nullable=false, columnDefinition = "int")
 	private int partidasGanadas;
+	
+	@Column(name = "partidasPerdidas", nullable=false, columnDefinition = "int")
 	private int partidasPerdidas;
+	
+	@Column(name = "puntaje", nullable=false, columnDefinition = "int")
 	private int puntaje;
 	
 	public Estadistica (){

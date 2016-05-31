@@ -3,7 +3,23 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+@Entity
+@Table (name = "manos")
 public class Mano {
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int idMano;
+	
+	@OneToMany(cascade= CascadeType.ALL)
+	@JoinColumn(name = "idMano")
 	private List<Movimiento> movimientos;
 	private int estado; //1 en curso, 2 terminada
 	
