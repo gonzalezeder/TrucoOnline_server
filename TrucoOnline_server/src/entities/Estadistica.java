@@ -8,10 +8,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "estadisticas")
+@Table(name = "Estadisticas")
 public class Estadistica {
 	@Id
 	@GeneratedValue(strategy= GenerationType.AUTO)
+	@Column(name="idEstadistica")
 	private int idEstadistica;
 	
 	@Column(name = "partidasJugadas", nullable=false, columnDefinition = "int")

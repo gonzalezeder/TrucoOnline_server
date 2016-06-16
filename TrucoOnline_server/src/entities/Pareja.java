@@ -10,7 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "parejas")
+@Table (name = "Parejas")
 public class Pareja {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

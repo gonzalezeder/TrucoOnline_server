@@ -7,14 +7,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "movimientos")
+@Table(name = "Movimientos")
 public class Movimiento {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name = "idMovimiento")
 	private int idMovimiento;
 	
 	@OneToOne(cascade=CascadeType.ALL)
@@ -22,8 +25,8 @@ public class Movimiento {
 	private Jugador jugador;
 	
 	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name= "idCanto", referencedColumnName = "idCanto")
-	private Canto canto;
+	@JoinColumn(name= "idTipoCanto", referencedColumnName = "idTipoCanto")
+	private TipoCanto canto;
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name= "idCarta", referencedColumnName = "idCarta")
@@ -32,7 +35,11 @@ public class Movimiento {
 	@Column(name = "envido", nullable=false, columnDefinition = "int")
 	private int envido;
 	
-	public Movimiento (Jugador jug, Canto canto, Carta carta,int envido){
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name = "idMano", insertable=false, updatable=false)
+	private Mano mano;
+	
+	public Movimiento (Jugador jug, TipoCanto canto, Carta carta,int envido){
 		this.setJugador(jug);
 		this.setCanto(canto);
 		this.setCarta(carta);
@@ -41,11 +48,11 @@ public class Movimiento {
 
 	
 	
-	public Canto getCanto() {
+	public TipoCanto getCanto() {
 		return canto;
 	}
 
-	public void setCanto(Canto canto) {
+	public void setCanto(TipoCanto canto) {
 		this.canto = canto;
 	}
 

@@ -86,7 +86,7 @@ public class Partida {
 
 	public Baza buscarBazaEnCurso() {
 		for(Baza b: bazas){
-			if(b.getEstado()==1)
+			if(b.getEstado().getIdEstado()==1)
 				return b;
 		}
 		

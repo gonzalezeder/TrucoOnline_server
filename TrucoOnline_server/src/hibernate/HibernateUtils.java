@@ -4,16 +4,22 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 
 import entities.Baza;
-import entities.Canto;
 import entities.Carta;
 import entities.Categoria;
+import entities.DetallePunto;
 import entities.Estadistica;
+import entities.Estado;
 import entities.Juego;
 import entities.Jugador;
+import entities.Mano;
+import entities.ManoJugador;
+import entities.ManoJugadorCarta;
+import entities.MatrizCanto;
 import entities.Mazo;
 import entities.Movimiento;
 import entities.Pareja;
 import entities.Partida;
+import entities.TipoCanto;
 
 public class HibernateUtils {
 
@@ -33,10 +39,18 @@ public class HibernateUtils {
 			config.addAnnotatedClass(Pareja.class);
 			//config.addAnnotatedClass(Juego.class);
 			//config.addAnnotatedClass(Partida.class);
-			//config.addAnnotatedClass(Baza.class);
-			config.addAnnotatedClass(Canto.class);
-			
+			config.addAnnotatedClass(ManoJugador.class);
+			config.addAnnotatedClass(ManoJugadorCarta.class);
+			config.addAnnotatedClass(TipoCanto.class);
+			config.addAnnotatedClass(Estado.class);
 			config.addAnnotatedClass(Movimiento.class);
+			config.addAnnotatedClass(Mano.class);
+			config.addAnnotatedClass(DetallePunto.class);
+			config.addAnnotatedClass(Baza.class);
+			
+			config.addAnnotatedClass(MatrizCanto.class);
+			
+			
 
 			sessionFactory = config.buildSessionFactory();
 		} catch (Throwable ex) {

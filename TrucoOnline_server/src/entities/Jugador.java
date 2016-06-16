@@ -14,11 +14,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 @Entity
-@Table(name="jugadores")
+@Table(name="Jugadores")
 public class Jugador implements Serializable{
 
-	private static final long serialVersionUID = 1L;
 	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7607361565135450355L;
+
 	@Id
 	@GeneratedValue(strategy= GenerationType.AUTO)
 	private int idJugador;
@@ -32,7 +37,8 @@ public class Jugador implements Serializable{
 	@Column(name = "password", nullable=false, length = 50)
 	private String password;
 	
-
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="idCategoria", referencedColumnName="idCategoria")
 	private Categoria categoria;
 	
 	
@@ -41,26 +47,9 @@ public class Jugador implements Serializable{
 	@JoinColumn(name = "idEstadistica", referencedColumnName = "idEstadistica")
 	private Estadistica estadistica;
 	
-	
-	
-	private static int ultNum=1;
-	
-	
-	public Jugador (String apodo, String mail, String password){
-		this.idJugador = getUltNum();
-		this.apodo = apodo;
-		this.mail = mail;
-		this.password = password;
-		this.categoria = Categoria.NOVATO;
-		this.estadistica = new Estadistica();
-		
+	public Jugador (){	
 	}
 	
-	private int getUltNum(){
-		return ultNum++;
-	}
-
-
 	public Estadistica getEstadistica() {
 		return estadistica;
 	}

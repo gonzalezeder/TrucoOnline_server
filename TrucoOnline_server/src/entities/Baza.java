@@ -6,45 +6,55 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 @Entity
-@Table(name = "bazas")
+@Table(name = "Bazas")
 public class Baza { // aa
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="idBaza")
 	private int idBaza;
-	private int estado; //1 En curso, 2 Finalizada
+	
+	@OneToOne(cascade =CascadeType.ALL)
+	@JoinColumn(name="idEstado", referencedColumnName= "idEstado")
+	private Estado estado; //1 En curso, 2 Finalizada
 	
 	@OneToMany(cascade= CascadeType.ALL)
-	@JoinColumn(name = "idBaza")
-	private List<Mano> manos;
+	@JoinColumn(name = "idMano")
+	private List<Mano> manos= new ArrayList<Mano>();
 	
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name = "idDetalle")
+	private List<DetallePunto> puntos = new ArrayList<DetallePunto>();
+	
+	@Transient
 	@OneToMany(cascade= CascadeType.ALL)
 	@JoinColumn(name = "idBaza")
-	private List<DetallePunto> puntos;
+	private List<TipoCanto> cantosRealizados;
 	
-	@OneToMany(cascade= CascadeType.ALL)
-	@JoinColumn(name = "idBaza")
-	private List<Canto> cantosRealizados;
 	
 	@OneToMany(cascade= CascadeType.ALL)
 	@JoinColumn(name = "idBaza")
 	private List<ManoJugador> manosJugadores;
 	
+	@Transient
 	private int jugMano;
 	
 	public Baza (int mano){
 		this.manos = new ArrayList<Mano>();
 		this.puntos = new ArrayList<DetallePunto>();
-		this.cantosRealizados = new ArrayList<Canto>();
+		this.cantosRealizados = new ArrayList<TipoCanto>();
 		this.manosJugadores = new ArrayList<ManoJugador>();
-		this.estado = 1;
+		//this.estado = 1;
 		this.jugMano = mano;
 	}
 	
@@ -63,7 +73,7 @@ public class Baza { // aa
 	public int verTurno(){ //Probar esta función!!
 		int cartasJugadas = 0;
 		for(Mano m: manos){
-			if (m.getEstado()==1){ //Busco la primera mano que esté en estado en curso. Si está en estado terminado, ya no tiene sentido. 
+			if (m.getEstado().getIdEstado()==1){ //Busco la primera mano que esté en estado en curso. Si está en estado terminado, ya no tiene sentido. 
 				cartasJugadas = m.calcularCartasJugadas();//busco quién debe jugar.
 				if(cartasJugadas == 0 || cartasJugadas == 4) //Le toca a quien es mano.
 					return this.jugMano;
@@ -99,16 +109,16 @@ public class Baza { // aa
 	public List<Carta> verCartas(Jugador jug) {
 		for(ManoJugador mj :manosJugadores)
 			if(mj.getJugador() == jug)
-				return mj.getCartas();
+				return mj.verCartas();
 		return null;
 	}
 	
 
-	public int getEstado() {
+	public Estado getEstado() {
 		return estado;
 	}
 
-	public void setEstado(int estado) {
+	public void setEstado(Estado estado) {
 		this.estado = estado;
 	}
 
@@ -128,11 +138,11 @@ public class Baza { // aa
 		this.puntos = puntos;
 	}
 
-	public List<Canto> getCantosRealizados() {
+	public List<TipoCanto> getCantosRealizados() {
 		return cantosRealizados;
 	}
 
-	public void setCantosRealizados(List<Canto> cantosRealizados) {
+	public void setCantosRealizados(List<TipoCanto> cantosRealizados) {
 		this.cantosRealizados = cantosRealizados;
 	}
 
@@ -176,7 +186,7 @@ public class Baza { // aa
 
 	private Mano buscarManoActiva() {
 		for(Mano mano: manos)
-			if(mano.getEstado()==1)
+			if(mano.getEstado().getIdEstado()==1)
 				return mano;
 		return null;
 	}

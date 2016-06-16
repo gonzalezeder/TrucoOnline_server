@@ -22,9 +22,9 @@ public class GestionJugadores extends UnicastRemoteObject implements TDAManejoDa
 	public GestionJugadores() throws RemoteException {
 		super();
 		jugadores = new HashSet<JugadorDTO>();	
-		jugadores.add(new JugadorDTO(1,"Santiago"));
-		jugadores.add(new JugadorDTO(2,"Nicolás"));
-		jugadores.add(new JugadorDTO(3,"Eder"));
+	//	jugadores.add(new JugadorDTO(1,"Santiago"));
+	//	jugadores.add(new JugadorDTO(2,"Nicolás"));
+	//	jugadores.add(new JugadorDTO(3,"Eder"));
 		
 	
 

@@ -1,44 +1,75 @@
 package entities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 @Entity
-@Table (name = "manos")
+@Table (name = "Manos")
 public class Mano {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int idMano;
 	
-	@OneToMany(cascade= CascadeType.ALL)
-	@JoinColumn(name = "idMano")
-	private List<Movimiento> movimientos;
-	private int estado; //1 en curso, 2 terminada
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name = "idMovimiento")
+	private List<Movimiento> movimientos = new ArrayList<Movimiento>();
+
+	
+	@OneToOne(cascade =CascadeType.ALL)
+	@JoinColumn(name="idEstado", referencedColumnName= "idEstado")
+	private Estado estado; //1 en curso, 2 terminada
+	
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name = "IdBaza", insertable=false, updatable=false)
+	private Baza baza;
 	
 	
 	public Mano(){
 		this.movimientos = new ArrayList<Movimiento>();
-		this.setEstado(1);
-		
+	
 	}
 	
-	public List<Canto> getCantosDisponibles(){
-		return null;
+	
+	public List<Movimiento> getMovimientos() {
+		return movimientos;
 	}
 
-	public int getEstado() {
+
+	public void setMovimientos(List<Movimiento> movimientos) {
+		this.movimientos = movimientos;
+	}
+
+
+	public Estado getEstadoMano() {
 		return estado;
 	}
 
-	public void setEstado(int estado) {
+
+	public void setEstadoMano(Estado estadoMano) {
+		this.estado = estadoMano;
+	}
+
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
 		this.estado = estado;
 	}
 
@@ -55,7 +86,6 @@ public class Mano {
 	public void jugar(Jugador j, Carta c) {
 		Movimiento m = new Movimiento(j, null, c, -1);
 		movimientos.add(m);
-		
 		
 	}
 	

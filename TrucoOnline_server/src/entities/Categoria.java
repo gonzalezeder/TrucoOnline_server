@@ -1,21 +1,33 @@
 package entities;
 
+import java.io.Serializable;
+
+import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "categorias")
-public enum Categoria {
-
-	NOVATO("Novato",0,0,0),
-	CALIFICADO("Calificado",100,500,5),
-	EXPERTO("Experto",500,3000,6), 
-	MASTER("Master",1000,8000, 8);
+@Table (name = "Categorias")
+public class Categoria implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6108615890242743396L;
+
+	/**
+	 * 
+	 */
 	@Id
-	@Column(name = "categoria")
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int idCategoria;
+	
+	
+	@Column(name = "categoria", length=60, nullable = false)
 	private String name;
 	
 	@Column(name = "cantPartidas", nullable=false, columnDefinition = "int")
@@ -27,11 +39,16 @@ public enum Categoria {
 	@Column(name = "promedio", nullable=false, columnDefinition = "int")
 	private float promedio;
 
-	private Categoria(String name, int cantPartidas, int puntaje, float promedio) {
-		this.name = name;
-		this.cantPartidas = cantPartidas;
-		this.puntaje = puntaje;
-		this.promedio = promedio;
+	public Categoria() {
+		
+	}
+	
+	public int getIdCategoria() {
+		return idCategoria;
+	}
+
+	public void setIdCategoria(int idCategoria) {
+		this.idCategoria = idCategoria;
 	}
 
 	public String getName() {
@@ -65,5 +82,7 @@ public enum Categoria {
 	public void setPromedio(float promedio) {
 		this.promedio = promedio;
 	}
+
+	
 
 }

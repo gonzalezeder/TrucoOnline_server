@@ -3,6 +3,11 @@ package tp_server;
 import java.util.ArrayList;
 import java.util.List;
 
+import dao.CategoriaDAO;
+import dao.JugadorDAO;
+import dtos.CategoriaDTO;
+import dtos.EstadisticaDTO;
+import dtos.JugadorDTO;
 import entities.Carta;
 import entities.Categoria;
 import entities.Juego;
@@ -10,22 +15,23 @@ import entities.Jugador;
 import entities.Lobby;
 
 public class Controlador {
-	private List<Jugador> jugadores;
+	private List<JugadorDTO> jugadores;
 	private List<Juego> juegos;
 	private Lobby lobby;
+	private List<CategoriaDTO> categorias;
+	
 	
 	private static Controlador instancia;
 	
 	
 	private Controlador (){
-		this.jugadores = new ArrayList<Jugador>();
+		this.jugadores = JugadorDAO.getInstancia().getAll();
+		this.categorias = CategoriaDAO.getInstancia().getAll();
 		this.lobby = new Lobby();
 		
 		
 		
-		
 	}
-	// Este metodo despues se vaa cuando agregamos la persistencia :)
 	public static Controlador getInstancia(){
 		if(instancia==null)
 			instancia = new Controlador();
@@ -35,35 +41,36 @@ public class Controlador {
 	
 	
 	public void altaJugador(String apodo, String mail, String password){ 
-		Jugador j = buscarJugador(mail);
+		JugadorDTO j = buscarJugador(mail);
 		if (j==null){
-			j = new Jugador(apodo,mail,password);
+			j = new JugadorDTO(0,apodo,mail,password,null,null);
 			jugadores.add(j);
+			JugadorDAO.getInstancia().GrabarJugador(j);
 			System.out.println("Se creó un jugador");
 		}else
 			System.out.println("Ya existe un jugador registrado con ese mail");
 	}
 
-	private Jugador buscarJugador(String mail){
-		for(Jugador j: jugadores)
-			if(j.getMail() == mail)
+	private JugadorDTO buscarJugador(String mail){
+		for(JugadorDTO j: jugadores)
+			if(j.getMail().equals(mail))
 				return j;
 		return null;
 	}
 	public void imprimirCategorias() {
 		System.out.println("---------------------------Categorías---------------------------");
-		for(Categoria c: Categoria.values())
+		for(CategoriaDTO c: categorias)
 			System.out.println(c.getName()+ "            Cantidad mínima de partidas: "+ c.getCantPartidas()+"        Puntaje mínimo: "+c.getPuntaje()+ "        Promedio mínimo: "+c.getPromedio());
 	}
 	public void imprimirJugadores() {
 		System.out.println("---------------------------Jugadores---------------------------");
-		for(Jugador j: jugadores)
-			System.out.println("idJugador: "+j.getIdJugador()+"       Apodo: "+ j.getApodo()+"        Mail: "+j.getMail()+ "        Password: "+j.getPassword());
+		for(JugadorDTO j: jugadores)
+			System.out.println("idJugador: "+j.getIdJugador()+"       Apodo: "+ j.getApodo()+"        Mail: "+j.getMail()+ "        Password: "+j.getPassword()+"       Categoria: "+j.getCategoria().getName());
 		}
 	public boolean validarLogin(String mail, String contraseña) {
-		Jugador j = buscarJugador(mail);
+		JugadorDTO j = buscarJugador(mail);
 		if (j!=null)
-			if(j.getPassword()==contraseña){
+			if(j.getPassword().equals(contraseña)){
 				System.out.println("Acceso correcto");
 				return true;
 			}else
@@ -75,20 +82,20 @@ public class Controlador {
 	}
 	
 	public void entrarLobby(int idJugador){
-		Jugador j = buscarJugadorPorId(idJugador);
-		if(j!=null)
-			Lobby.getInstancia().acceder(j);
+		JugadorDTO j = buscarJugadorPorId(idJugador);
+	//	if(j!=null)
+	//		Lobby.getInstancia().acceder(j);
 		
 	}
 	
 	public void salirLobby(int idJugador){
-		Jugador j = buscarJugadorPorId(idJugador);
-		if(j!=null)
-			Lobby.getInstancia().salir(j);
+		JugadorDTO j = buscarJugadorPorId(idJugador);
+		//if(j!=null)
+		//	Lobby.getInstancia().salir(j);
 	}
 	
-	private Jugador buscarJugadorPorId(int idJugador) {
-		for(Jugador j: jugadores)
+	private JugadorDTO buscarJugadorPorId(int idJugador) {
+		for(JugadorDTO j: jugadores)
 			if(j.getIdJugador()==idJugador)
 				return j;
 		return null;
@@ -103,9 +110,9 @@ public class Controlador {
 	}
 	
 	public void jugarTrucoIndividual(int idJugador){
-		Jugador j = buscarJugadorPorId(idJugador);
-		if(j!=null)
-			Lobby.getInstancia().jugarIndividual(j);
+		JugadorDTO j = buscarJugadorPorId(idJugador);
+	//	if(j!=null)
+	//		Lobby.getInstancia().jugarIndividual(j);
 		
 	}
 	
