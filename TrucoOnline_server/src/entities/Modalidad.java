@@ -1,16 +1,23 @@
 package entities;
 
-public enum Modalidad {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="TiposJuego")
+public class Modalidad {
 	
-	LIBREINDIVIDUAL("Libre Individual");
+	@Id
+	@Column(name="idTipoJuego")
+	private int IdModalidad;
 	
+	@Column(nullable=false, length=50)
 	private String nombre;
 	
-	private Modalidad (String nombre){
-		this.setNombre(nombre);
+	public Modalidad() {
 	}
-
-	
 	
 	
 	
@@ -20,6 +27,14 @@ public enum Modalidad {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public int getModalidad() {
+		return IdModalidad;
+	}
+
+	public void setModalidad(int modalidad) {
+		this.IdModalidad = modalidad;
 	}
 
 }

@@ -2,11 +2,8 @@ package entities;
 
 import java.io.Serializable;
 
-import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -14,18 +11,12 @@ import javax.persistence.Table;
 @Table (name = "Categorias")
 public class Categoria implements Serializable {
 	
-	/**
-	 * 
-	 */
+	//Variables y Mapeo
+	
 	private static final long serialVersionUID = -6108615890242743396L;
 
-	/**
-	 * 
-	 */
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int idCategoria;
-	
 	
 	@Column(name = "categoria", length=60, nullable = false)
 	private String name;
@@ -39,9 +30,13 @@ public class Categoria implements Serializable {
 	@Column(name = "promedio", nullable=false, columnDefinition = "int")
 	private float promedio;
 
+	//Constructores
+	
 	public Categoria() {
 		
 	}
+	
+	//Getters y Setters
 	
 	public int getIdCategoria() {
 		return idCategoria;
@@ -82,7 +77,5 @@ public class Categoria implements Serializable {
 	public void setPromedio(float promedio) {
 		this.promedio = promedio;
 	}
-
-	
 
 }

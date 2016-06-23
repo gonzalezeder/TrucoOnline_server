@@ -26,12 +26,8 @@ public class JugadorDAO {
 	}
 	
 	public void GrabarJugador(JugadorDTO j){
-		Jugador jug = new Jugador();
-		jug.setApodo(j.getApodo());
-		jug.setMail(j.getMail());
-		jug.setPassword(j.getPassword());
-		jug.setEstadistica(new Estadistica());
-
+		Jugador jug = new Jugador(j.getApodo(),j.getMail(),j.getPassword());
+		
 		SessionFactory sf = HibernateUtils.getSessionFactory();
 		Session s = sf.openSession();
 		
@@ -65,6 +61,23 @@ public class JugadorDAO {
 			return jugDTO;
 		}
 			
+	}
+
+	public JugadorDTO getJugador(int idJugador) {
+		SessionFactory sf = HibernateUtils.getSessionFactory();
+		Session s = sf.openSession();
+		s.beginTransaction();
+		Jugador jug = (Jugador) s.createQuery("select j from Jugador where j.idJugador = :id")
+				.setInteger("id", idJugador).uniqueResult();
+		s.getTransaction().commit();
+		s.close();
+		if(jug!=null){
+			CategoriaDTO cAux = new CategoriaDTO(jug.getCategoria().getName(), jug.getCategoria().getCantPartidas(),jug.getCategoria().getPuntaje(),jug.getCategoria().getPromedio());
+			EstadisticaDTO eAux = new EstadisticaDTO(jug.getEstadistica().getIdEstadistica(),jug.getEstadistica().getPartidasJugadas(),jug.getEstadistica().getPartidasGanadas(),jug.getEstadistica().getPartidasPerdidas(),jug.getEstadistica().getPuntaje());
+			JugadorDTO jugador = new JugadorDTO(jug.getIdJugador(),jug.getApodo(),jug.getMail(),jug.getPassword(),cAux,eAux);
+			return jugador;
+		}
+		return null;
 	}
 }
 

@@ -48,13 +48,9 @@ public class ManoJugador {
 	}
 
 	
-	
-	
-	
-	
-	private void crearManoJugadorCartas(List<Carta> cartasJug) {
-		// TODO Auto-generated method stub
-		
+	private void crearManoJugadorCartas(List<Carta> cartasJugador) {
+		for(Carta c: cartasJugador)
+			this.cartas.add(new ManoJugadorCarta(c));
 	}
 
 	public Jugador getJugador() {

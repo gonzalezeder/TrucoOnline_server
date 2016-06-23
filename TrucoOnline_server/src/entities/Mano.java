@@ -32,14 +32,17 @@ public class Mano {
 	
 	@OneToOne(cascade =CascadeType.ALL)
 	@JoinColumn(name="idEstado", referencedColumnName= "idEstado")
-	private Estado estado; //1 en curso, 2 terminada
+	private Estado estado; 
 	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "IdBaza", insertable=false, updatable=false)
 	private Baza baza;
 	
-	
 	public Mano(){
+	
+	}
+	
+	public Mano(Baza baza){
 		this.movimientos = new ArrayList<Movimiento>();
 	
 	}

@@ -8,8 +8,9 @@ public class Main {
 	public static void main(String[] args) {
 		Controlador.getInstancia();
 		
-//		Controlador.getInstancia().altaJugador("GODIO","GODIOTEODIO@gmail.com","GodioPuto");
-//		Controlador.getInstancia().altaJugador("Nicolas","Nicolas@gmail.com","contraseña");
+		Controlador.getInstancia().altaJugador("GODIO","GODIOTEODIO@gmail.com","GodioPuto");
+		Controlador.getInstancia().altaJugador("Nicolas","Nicolas@gmail.com","contraseña");
+		
 //		Controlador.getInstancia().altaJugador("Santiago","Santiago@gmail.com","contraseña");
 //		Controlador.getInstancia().altaJugador("Eduardo","Eduardo@gmail.com","contraseña");
 //		Controlador.getInstancia().altaJugador("Eder","Eder@gmail.com","contraseña");
@@ -38,7 +39,7 @@ public class Main {
 		
 		test aTest = new test();
 		aTest.prueba();
-		
+//		
 	}
 	
 

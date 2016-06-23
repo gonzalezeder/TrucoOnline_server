@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -36,7 +37,11 @@ public class Baza { // aa
 	@JoinColumn(name = "idDetalle")
 	private List<DetallePunto> puntos = new ArrayList<DetallePunto>();
 	
-	@Transient
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name = "IdPartida", insertable=false, updatable=false)
+	private Partida partida;
+	
+	@Transient //creo q no haria falta, xq a través de los movimientos se puede ver en qué estado está cada tanto. Capaz conviene hacerlo para que sea mas eficiente la busqueda
 	@OneToMany(cascade= CascadeType.ALL)
 	@JoinColumn(name = "idBaza")
 	private List<TipoCanto> cantosRealizados;
@@ -46,8 +51,12 @@ public class Baza { // aa
 	@JoinColumn(name = "idBaza")
 	private List<ManoJugador> manosJugadores;
 	
-	@Transient
+	@Transient // hacerlo del tipo jugador...
 	private int jugMano;
+	
+	public Baza(){
+		
+	}
 	
 	public Baza (int mano){
 		this.manos = new ArrayList<Mano>();

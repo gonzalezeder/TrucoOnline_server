@@ -10,41 +10,48 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
-@Table(name = "partidas")
+@Table(name = "Partidas")
 public class Partida {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int idPartida;
+	
 	@OneToMany(cascade= CascadeType.ALL)
 	@JoinColumn(name = "idPartida")
 	private List<Baza> bazas;
-	private int estado; // 1 En Curso, 2 Finalizada
+	
+	@OneToOne(cascade =CascadeType.ALL)
+	@JoinColumn(name="idEstado", referencedColumnName= "idEstado")
+	private Estado estado; //1 En curso, 2 Finalizada
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "parejaGanadora")
 	private Pareja parejaGanadora;
+	
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name = "IdJuego", insertable=false, updatable=false)
+	private Juego juego;
+	
+	@Transient
 	private int jugMano;
+	
 	
 	public Partida(){
 		this.bazas = new ArrayList<Baza>();
 		this.parejaGanadora = null;
-		this.estado = 1;
+	//	this.estado = 1;
 		this.jugMano = -1; //Inicializo en -1. Siempre va a indicar qué jugador es mano en la baza
 		
 	}
 
-	public int getEstado() {
-		return estado;
-	}
-
-	public void setEstado(int estado) {
-		this.estado = estado;
-	}
+	
 
 	public Pareja getParejaGanadora() {
 		return parejaGanadora;
@@ -105,6 +112,18 @@ public class Partida {
 		if(b!=null)
 			return b.verCartas(jug);
 		return null;
+	}
+
+
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 	
 	

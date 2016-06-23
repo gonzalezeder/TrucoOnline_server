@@ -30,6 +30,17 @@ public class ManoJugadorCarta {
 	@JoinColumn(name = "idManoJugador", insertable=false, updatable=false)
 	private ManoJugador manoJugador;
 
+	
+	public ManoJugadorCarta(){
+	}
+	
+	public ManoJugadorCarta(Carta carta) {
+		
+		this.jugada = 0;
+		this.carta = carta;
+		
+	}
+
 	public int getIdManoJugadorCarta() {
 		return idManoJugadorCarta;
 	}

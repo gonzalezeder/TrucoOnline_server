@@ -5,9 +5,12 @@ import java.util.List;
 
 import dao.CategoriaDAO;
 import dao.JugadorDAO;
+import dao.LobbyDAO;
 import dtos.CategoriaDTO;
 import dtos.EstadisticaDTO;
+import dtos.JuegoDTO;
 import dtos.JugadorDTO;
+import dtos.LobbyDTO;
 import entities.Carta;
 import entities.Categoria;
 import entities.Juego;
@@ -16,8 +19,7 @@ import entities.Lobby;
 
 public class Controlador {
 	private List<JugadorDTO> jugadores;
-	private List<Juego> juegos;
-	private Lobby lobby;
+	private List<LobbyDTO> lobby;
 	private List<CategoriaDTO> categorias;
 	
 	
@@ -26,8 +28,8 @@ public class Controlador {
 	
 	private Controlador (){
 		this.jugadores = JugadorDAO.getInstancia().getAll();
+		this.lobby = LobbyDAO.getInstancia().getAll();
 		this.categorias = CategoriaDAO.getInstancia().getAll();
-		this.lobby = new Lobby();
 		
 		
 		
@@ -81,12 +83,12 @@ public class Controlador {
 		
 	}
 	
-	public void entrarLobby(int idJugador){
-		JugadorDTO j = buscarJugadorPorId(idJugador);
-	//	if(j!=null)
-	//		Lobby.getInstancia().acceder(j);
-		
-	}
+//	public void entrarLobby(int idJugador){
+//		JugadorDTO j = buscarJugadorPorId(idJugador);
+//		if(j!=null)
+//			Lobby.getInstancia().acceder(j);
+//		
+//	}
 	
 	public void salirLobby(int idJugador){
 		JugadorDTO j = buscarJugadorPorId(idJugador);
@@ -101,41 +103,41 @@ public class Controlador {
 		return null;
 	}
 	
-	public List<Jugador> verJugadoresOnline(){
-		List<Jugador> jugs = Lobby.getInstancia().verJugadoresOnline();
-		System.out.println("---------------------------Jugadores Online---------------------------");
-		for(Jugador j: jugs)
-			System.out.println("idJugador: "+j.getIdJugador()+"       Apodo: "+ j.getApodo()+"        Mail: "+j.getMail()+ "        Password: "+j.getPassword());
-		return jugs;
-	}
+//	public List<Jugador> verJugadoresOnline(){
+//		List<Jugador> jugs = Lobby.getInstancia().verJugadoresOnline();
+//		System.out.println("---------------------------Jugadores Online---------------------------");
+//		for(Jugador j: jugs)
+//			System.out.println("idJugador: "+j.getIdJugador()+"       Apodo: "+ j.getApodo()+"        Mail: "+j.getMail()+ "        Password: "+j.getPassword());
+//		return jugs;
+//	}
 	
-	public void jugarTrucoIndividual(int idJugador){
-		JugadorDTO j = buscarJugadorPorId(idJugador);
-	//	if(j!=null)
-	//		Lobby.getInstancia().jugarIndividual(j);
-		
-	}
+//	public void jugarTrucoIndividual(int idJugador){
+//		JugadorDTO j = buscarJugadorPorId(idJugador);
+//	//	if(j!=null)
+//	//		Lobby.getInstancia().jugarIndividual(j);
+//		
+//	}
 	
-	public void verCartasJugador(int idJuego, int idJugador){
-		List<Carta> cartas =  Lobby.getInstancia().verCartas(idJuego, idJugador);
-		int i = 1;
-		if(cartas !=null){
-			System.out.println("\nCartas del jugador "+idJugador);
-			for(Carta c: cartas){
-				System.out.println("Carta "+i+": "+c.getNumero()+" de "+c.getPalo());
-				i++;
-			}
-		}
-		else
-			System.out.println("Ocurrió un error al repartir");
-	}
-	public void crearJuegos() {
-		Lobby.getInstancia().crearJuegosIndividuales();
-	}
-	public void jugarCarta(int idJuego, int jugador, int carta) {
-		Lobby.getInstancia().jugarCarta(idJuego, jugador, carta);
-		
-	}
+//	public void verCartasJugador(int idJuego, int idJugador){
+//		List<Carta> cartas =  Lobby.getInstancia().verCartas(idJuego, idJugador);
+//		int i = 1;
+//		if(cartas !=null){
+//			System.out.println("\nCartas del jugador "+idJugador);
+//			for(Carta c: cartas){
+//				System.out.println("Carta "+i+": "+c.getNumero()+" de "+c.getPalo());
+//				i++;
+//			}
+//		}
+//		else
+//			System.out.println("Ocurrió un error al repartir");
+//	}
+//	public void crearJuegos() {
+//		Lobby.getInstancia().crearJuegosIndividuales();
+//	}
+//	public void jugarCarta(int idJuego, int jugador, int carta) {
+//		Lobby.getInstancia().jugarCarta(idJuego, jugador, carta);
+//		
+//	}
 	
 	
 		

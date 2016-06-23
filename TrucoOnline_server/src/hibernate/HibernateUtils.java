@@ -11,11 +11,13 @@ import entities.Estadistica;
 import entities.Estado;
 import entities.Juego;
 import entities.Jugador;
+import entities.Lobby;
 import entities.Mano;
 import entities.ManoJugador;
 import entities.ManoJugadorCarta;
 import entities.MatrizCanto;
 import entities.Mazo;
+import entities.Modalidad;
 import entities.Movimiento;
 import entities.Pareja;
 import entities.Partida;
@@ -37,8 +39,8 @@ public class HibernateUtils {
 			config.addAnnotatedClass(Carta.class);
 			config.addAnnotatedClass(Mazo.class);
 			config.addAnnotatedClass(Pareja.class);
-			//config.addAnnotatedClass(Juego.class);
-			//config.addAnnotatedClass(Partida.class);
+			config.addAnnotatedClass(Juego.class);
+			config.addAnnotatedClass(Partida.class);
 			config.addAnnotatedClass(ManoJugador.class);
 			config.addAnnotatedClass(ManoJugadorCarta.class);
 			config.addAnnotatedClass(TipoCanto.class);
@@ -47,8 +49,9 @@ public class HibernateUtils {
 			config.addAnnotatedClass(Mano.class);
 			config.addAnnotatedClass(DetallePunto.class);
 			config.addAnnotatedClass(Baza.class);
-			
+			config.addAnnotatedClass(Modalidad.class);
 			config.addAnnotatedClass(MatrizCanto.class);
+			config.addAnnotatedClass(Lobby.class);
 			
 			
 

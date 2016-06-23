@@ -15,10 +15,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.collections.functors.FalsePredicate;
 @Entity
-@Table(name ="juegos")
+@Table(name ="Juegos")
 public class Juego {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,7 +36,10 @@ public class Juego {
 	@JoinColumn(name = "equipo2", referencedColumnName = "idPareja")
 	private Pareja equipo2;
 	
-	private int estado; //1 Creada, 2 En curso, 3 Terminada
+	@OneToOne(cascade =CascadeType.ALL)
+	@JoinColumn(name="idEstado", referencedColumnName= "idEstado")
+	private Estado estado;
+	
 	@OneToMany(cascade= CascadeType.ALL)
 	@JoinColumn(name = "idJuego")
 	private List<Partida> partidas;
@@ -46,6 +50,8 @@ public class Juego {
 	@JoinColumn(name = "idMazo", referencedColumnName = "idMazo")
 	private Mazo mazo;
 	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idTipoJuego", referencedColumnName = "idTipoJuego")
 	private Modalidad modalidad;
 	
 	
@@ -57,7 +63,7 @@ public class Juego {
 		this.fechaJuego = new Date();
 		this.equipo1=e1;
 		this.equipo2 =e2;
-		this.estado = 1;
+//		this.estado = 1;
 		partidas = new ArrayList<Partida>();
 		this.mazo = new Mazo();
 		
@@ -107,7 +113,7 @@ public class Juego {
 	
 	public Partida buscarPartidaEnCurso(){
 		for(Partida p: partidas){
-			if(p.getEstado()==1)
+			if(p.getEstado().getIdEstado()==1)
 				return p;
 		}
 		return null;
@@ -191,13 +197,7 @@ public class Juego {
 		this.equipo2 = equipo2;
 	}
 
-	public int getEstado() {
-		return estado;
-	}
-
-	public void setEstado(int estado) {
-		this.estado = estado;
-	}
+	
 
 	public List<Partida> getPartidas() {
 		return partidas;

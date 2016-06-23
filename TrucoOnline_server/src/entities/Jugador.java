@@ -5,8 +5,6 @@ import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,12 +14,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name="Jugadores")
 public class Jugador implements Serializable{
-
 	
+	//Variables y Mapeo
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7607361565135450355L;
 
 	@Id
@@ -41,14 +36,24 @@ public class Jugador implements Serializable{
 	@JoinColumn(name="idCategoria", referencedColumnName="idCategoria")
 	private Categoria categoria;
 	
-	
-	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idEstadistica", referencedColumnName = "idEstadistica")
 	private Estadistica estadistica;
 	
+	//Constructores
+	
 	public Jugador (){	
 	}
+	
+	public Jugador(String apodo, String mail, String password){
+		this.apodo= apodo;
+		this.mail=mail;
+		this.password=password;
+		this.estadistica=new Estadistica();
+		this.categoria=new Categoria();
+	}
+	
+	//Getters y Setters
 	
 	public Estadistica getEstadistica() {
 		return estadistica;
@@ -57,8 +62,7 @@ public class Jugador implements Serializable{
 	public void setEstadistica(Estadistica estadistica) {
 		this.estadistica = estadistica;
 	}
-	@Enumerated(EnumType.STRING)
-	@Column(name="categoria", nullable=false)
+	
 	public Categoria getCategoria() {
 		return categoria;
 	}

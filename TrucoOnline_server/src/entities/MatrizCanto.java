@@ -14,7 +14,6 @@ import javax.persistence.Table;
 @Table(name="MatrizCantos")
 public class MatrizCanto {
 	@Id
-	@GeneratedValue(strategy= GenerationType.AUTO)
 	@Column(name="idMatriz")
 	private int idMatriz;
 	
