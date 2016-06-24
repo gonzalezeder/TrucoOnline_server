@@ -16,14 +16,17 @@ public class Pareja {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int idPareja;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne()
 	@JoinColumn(name = "jugador1", referencedColumnName = "idJugador")
 	private Jugador jugador1;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne()
 	@JoinColumn(name = "jugador2", referencedColumnName = "idJugador")
 	private Jugador jugador2;
 	
+	public Pareja(){
+		
+	}
 	
 	public Pareja (Jugador j1, Jugador j2){
 		this.jugador1 = j1;

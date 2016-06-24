@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -16,6 +17,7 @@ public class Categoria implements Serializable {
 	private static final long serialVersionUID = -6108615890242743396L;
 
 	@Id
+	@GeneratedValue()
 	private int idCategoria;
 	
 	@Column(name = "categoria", length=60, nullable = false)
@@ -36,6 +38,19 @@ public class Categoria implements Serializable {
 		
 	}
 	
+	
+	
+	public Categoria(int id, String name, int cantPartidas,
+			int puntaje, float promedio) {
+		this.idCategoria=id;
+		this.name = name;
+		this.cantPartidas = cantPartidas;
+		this.puntaje = puntaje;
+		this.promedio = promedio;
+	}
+
+
+
 	//Getters y Setters
 	
 	public int getIdCategoria() {

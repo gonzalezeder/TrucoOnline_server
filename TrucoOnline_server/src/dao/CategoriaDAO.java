@@ -9,9 +9,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import dtos.CategoriaDTO;
-import dtos.EstadisticaDTO;
+import dtos.CategoriaDTO;
 import dtos.JugadorDTO;
 import entities.Categoria;
+import entities.Estadistica;
 import entities.Jugador;
 
 public class CategoriaDAO  {
@@ -34,7 +35,7 @@ public class CategoriaDAO  {
 		s.close();
 		if(cat!=null){
 			for(Categoria c: cat){
-				CategoriaDTO cAux = new CategoriaDTO(c.getName(),c.getCantPartidas(),c.getPuntaje(),c.getPromedio());
+				CategoriaDTO cAux = entidadToDto(c);
 				catDTO.add(cAux);
 			}
 			return catDTO;
@@ -44,4 +45,29 @@ public class CategoriaDAO  {
 		}
 			
 	}
+	
+	public CategoriaDTO entidadToDto(Categoria c){
+		CategoriaDTO cat = new CategoriaDTO(c.getIdCategoria(), c.getName(),c.getCantPartidas(),c.getPuntaje(),c.getPromedio());
+		return cat;
+	}
+	
+	public Categoria dtoToEntidad(CategoriaDTO c){
+		Categoria cat = new Categoria(c.getId(), c.getName(),c.getCantPartidas(),c.getPuntaje(),c.getPromedio());
+		return cat;
+	}
+
+	public CategoriaDTO getCategoria(int idCategoria) {
+		SessionFactory sf = HibernateUtils.getSessionFactory();
+		Session s = sf.openSession();
+		s.beginTransaction();
+		Categoria cat = (Categoria) s.createQuery("select c from Categoria c where c.idCategoria = :id")
+				.setInteger("id", idCategoria).uniqueResult();
+		s.getTransaction().commit();
+		s.close();
+		if(cat!=null){	
+			return entidadToDto(cat);
+		}
+		return null;
+	}
+	
 }

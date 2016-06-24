@@ -2,8 +2,6 @@ package entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -16,6 +14,18 @@ public class Estado {
 	
 	@Column(name = "estado", length=60, nullable = false)
 	private String estado;
+
+	public Estado() {
+	}
+	
+	
+
+	public Estado(int idEstado, String estado) {
+		this.idEstado = idEstado;
+		this.estado = estado;
+	}
+
+
 
 	public int getIdEstado() {
 		return idEstado;

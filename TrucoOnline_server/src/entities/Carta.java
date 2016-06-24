@@ -12,7 +12,6 @@ import javax.persistence.Table;
 public class Carta {
 
 	@Id
-	@GeneratedValue (strategy = GenerationType.AUTO)
 	private int idCarta;
 	
 	@Column(name = "numero", nullable=false, columnDefinition = "int")

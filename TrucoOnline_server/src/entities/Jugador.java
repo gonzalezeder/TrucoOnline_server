@@ -32,7 +32,7 @@ public class Jugador implements Serializable{
 	@Column(name = "password", nullable=false, length = 50)
 	private String password;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne()
 	@JoinColumn(name="idCategoria", referencedColumnName="idCategoria")
 	private Categoria categoria;
 	
@@ -53,6 +53,17 @@ public class Jugador implements Serializable{
 		this.categoria=new Categoria();
 	}
 	
+	
+	public Jugador(int idJugador, String mail, String apodo, String password,
+			Categoria categoria, Estadistica estadistica) {
+		this.idJugador = idJugador;
+		this.mail = mail;
+		this.apodo = apodo;
+		this.password = password;
+		this.categoria = categoria;
+		this.estadistica = estadistica;
+	}
+
 	//Getters y Setters
 	
 	public Estadistica getEstadistica() {

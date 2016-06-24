@@ -35,6 +35,19 @@ public class Estadistica {
 		this.puntaje = 0;
 	}
 	
+	
+	
+	public Estadistica(int idEstadistica, int partidasJugadas,
+			int partidasGanadas, int partidasPerdidas, int puntaje) {
+		this.idEstadistica = idEstadistica;
+		this.partidasJugadas = partidasJugadas;
+		this.partidasGanadas = partidasGanadas;
+		this.partidasPerdidas = partidasPerdidas;
+		this.puntaje = puntaje;
+	}
+
+
+
 	public int getIdEstadistica() {
 		return idEstadistica;
 	}

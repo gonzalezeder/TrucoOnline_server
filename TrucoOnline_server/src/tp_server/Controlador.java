@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.CategoriaDAO;
+import dao.JuegoDAO;
 import dao.JugadorDAO;
 import dao.LobbyDAO;
-import dtos.CategoriaDTO;
-import dtos.EstadisticaDTO;
-import dtos.JuegoDTO;
-import dtos.JugadorDTO;
-import dtos.LobbyDTO;
+import dao.ModalidadDAO;
+import dtos.*;
 import entities.Carta;
 import entities.Categoria;
 import entities.Juego;
@@ -21,7 +19,7 @@ public class Controlador {
 	private List<JugadorDTO> jugadores;
 	private List<LobbyDTO> lobby;
 	private List<CategoriaDTO> categorias;
-	
+	private List<JuegoDTO> juegos;
 	
 	private static Controlador instancia;
 	
@@ -30,6 +28,7 @@ public class Controlador {
 		this.jugadores = JugadorDAO.getInstancia().getAll();
 		this.lobby = LobbyDAO.getInstancia().getAll();
 		this.categorias = CategoriaDAO.getInstancia().getAll();
+		this.juegos = JuegoDAO.getInstancia().getAll();
 		
 		
 		
@@ -82,19 +81,7 @@ public class Controlador {
 		return false;
 		
 	}
-	
-//	public void entrarLobby(int idJugador){
-//		JugadorDTO j = buscarJugadorPorId(idJugador);
-//		if(j!=null)
-//			Lobby.getInstancia().acceder(j);
-//		
-//	}
-	
-	public void salirLobby(int idJugador){
-		JugadorDTO j = buscarJugadorPorId(idJugador);
-		//if(j!=null)
-		//	Lobby.getInstancia().salir(j);
-	}
+
 	
 	private JugadorDTO buscarJugadorPorId(int idJugador) {
 		for(JugadorDTO j: jugadores)
@@ -111,13 +98,52 @@ public class Controlador {
 //		return jugs;
 //	}
 	
-//	public void jugarTrucoIndividual(int idJugador){
-//		JugadorDTO j = buscarJugadorPorId(idJugador);
-//	//	if(j!=null)
-//	//		Lobby.getInstancia().jugarIndividual(j);
-//		
-//	}
+	public void jugarTruco(int idJugador, int mod){
+		JugadorDTO j = buscarJugadorPorId(idJugador);
+		if(j!=null){
+			ModalidadDTO m = ModalidadDAO.getInstancia().getModalidad(mod);
+			if(m!=null){
+				if(!estaAnotado(j,m)){
+					LobbyDTO l = new LobbyDTO(j, m);
+					lobby.add(l);
+					LobbyDAO.getInstancia().crearLobby(l);
+					System.out.println("\nEl jugador "+j.getApodo()+" se ha anotado para jugar en modo "+m.getNombre());
+				}else
+					System.out.println("\nEl jugador "+j.getApodo()+" ya se encuentra anotado para jugar en modo "+m.getNombre());
+			}else
+				System.out.println("La modalidad ingresada no existe");
+		}else
+			System.out.println("El jugador no existe");
+	}
+private boolean estaAnotado(JugadorDTO j, ModalidadDTO m) {
+	for(LobbyDTO l: lobby)
+		if(l.estaAnotado(j,m))
+			return true;
+	return false;
+}
 	
+public void sacarJugadorModalidad(int idJugador, int mod, int est) { //0 Disponible, 1 Jugando, 2 cancelo el juego, 3 terminó.
+	JugadorDTO j = buscarJugadorPorId(idJugador);
+	if(j!=null){
+		ModalidadDTO m = ModalidadDAO.getInstancia().getModalidad(mod);
+		if(m!=null){
+			for(LobbyDTO l: lobby)
+				if(l.estaAnotado(j, m)){
+					l.setJugando(est);
+					LobbyDAO.getInstancia().quitarJugador(j.getIdJugador(),m.getModalidad());
+					System.out.println("\nEl jugador "+j.getApodo()+" ya no se encuentra anotado para jugar en modo "+m.getNombre());
+					return;
+				}
+			System.out.println("\nEl jugador "+j.getApodo()+" no se encuentra anotado para jugar en modo "+m.getNombre());
+		}else
+			System.out.println("La modalidad ingresada no existe");
+	}else
+		System.out.println("El jugador no existe");	
+}
+
+
+
+
 //	public void verCartasJugador(int idJuego, int idJugador){
 //		List<Carta> cartas =  Lobby.getInstancia().verCartas(idJuego, idJugador);
 //		int i = 1;
@@ -131,13 +157,53 @@ public class Controlador {
 //		else
 //			System.out.println("Ocurrió un error al repartir");
 //	}
-//	public void crearJuegos() {
-//		Lobby.getInstancia().crearJuegosIndividuales();
-//	}
+	public void crearJuegos() {
+		crearJuegosIndividuales(1);
+	}
 //	public void jugarCarta(int idJuego, int jugador, int carta) {
 //		Lobby.getInstancia().jugarCarta(idJuego, jugador, carta);
 //		
 //	}
+	private void crearJuegosIndividuales(int mod) {
+		List<JugadorDTO> jugadores = new ArrayList<JugadorDTO>(); 
+		ModalidadDTO m = ModalidadDAO.getInstancia().getModalidad(mod);
+		for(LobbyDTO l: lobby){
+			if(l.getModalidad().getModalidad()==1 && l.getJugando()==0){
+				jugadores.add(l.getJugador());
+			}
+			if(jugadores.size()==4){
+				ParejaDTO eq1 = new ParejaDTO(jugadores.get(0),jugadores.get(1));
+				ParejaDTO eq2 = new ParejaDTO(jugadores.get(1),jugadores.get(2));
+				JuegoDTO j = new JuegoDTO(eq1,eq2, m);
+				juegos.add(j);
+				JuegoDAO.getInstancia().crearJuego(j);
+				System.out.println("Juego Individual creado");
+				sacarJugadorModalidad(jugadores.get(0).getIdJugador(), mod,1); 
+				sacarJugadorModalidad(jugadores.get(1).getIdJugador(), mod,1);
+				sacarJugadorModalidad(jugadores.get(2).getIdJugador(), mod,1);
+				sacarJugadorModalidad(jugadores.get(3).getIdJugador(), mod,1);
+				jugadores.clear();
+				
+			}
+				
+		}
+//		
+//		if(libreIndividual.size()>=4){ // Hay que randomizarlo
+//				Pareja eq1 = new Pareja(libreIndividual.get(0),libreIndividual.get(1));
+//				Pareja eq2 = new Pareja(libreIndividual.get(2),libreIndividual.get(3));
+//				Juego j = new Juego(eq1, eq2);
+//				sacarJugadorLibreIndividual(eq1.getJugador1());
+//				sacarJugadorLibreIndividual(eq1.getJugador2());
+//				sacarJugadorLibreIndividual(eq2.getJugador1());
+//				sacarJugadorLibreIndividual(eq2.getJugador2());
+//				j.iniciarPartida();
+//				j.repartirCartas();
+//				juegos.add(j);
+//				
+//			}
+//		}
+	
+}
 	
 	
 		

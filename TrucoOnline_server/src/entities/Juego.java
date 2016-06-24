@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.apache.commons.collections.functors.FalsePredicate;
@@ -26,6 +28,7 @@ public class Juego {
 	private int idJuego;
 	
 	@Column(name="fechaJuego", columnDefinition = "Date", nullable = false)
+	@Temporal(TemporalType.DATE)
 	private Date fechaJuego;
 	
 	@OneToOne(cascade = CascadeType.ALL)
@@ -36,7 +39,7 @@ public class Juego {
 	@JoinColumn(name = "equipo2", referencedColumnName = "idPareja")
 	private Pareja equipo2;
 	
-	@OneToOne(cascade =CascadeType.ALL)
+	@OneToOne()
 	@JoinColumn(name="idEstado", referencedColumnName= "idEstado")
 	private Estado estado;
 	
@@ -55,24 +58,20 @@ public class Juego {
 	private Modalidad modalidad;
 	
 	
-	// Recordar para formatear la fecha!! SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	// Recordar para formatear la fecha!! SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss [.fffffffff]");
 	
-	public Juego (Pareja e1, Pareja e2){
-		
-		this.idJuego = getUltNum();
-		this.fechaJuego = new Date();
+	public Juego (Pareja e1, Pareja e2, Modalidad mod){
 		this.equipo1=e1;
 		this.equipo2 =e2;
-//		this.estado = 1;
+		this.estado = new Estado(1, "Creado");
+		this.fechaJuego = new Date();
 		partidas = new ArrayList<Partida>();
 		this.mazo = new Mazo();
-		
-		
-		
+		this.modalidad = mod;
 	}
-	
-	private int getUltNum(){
-		return ultNum++;
+
+	public Juego(){
+		
 	}
 	
 	public Partida iniciarPartida(){

@@ -30,7 +30,7 @@ public class JuegoDAO {
 		SessionFactory sf = HibernateUtils.getSessionFactory();
 		Session s = sf.openSession();
 		s.beginTransaction();
-		List<Juego> juegos = (List<Juego>) s.createQuery("SELECT j from Juegos j").list();
+		List<Juego> juegos = (List<Juego>) s.createQuery("SELECT j from Juego j").list();
 		s.getTransaction().commit();
 		s.close();
 		if(juegos!=null){
@@ -44,6 +44,21 @@ public class JuegoDAO {
 		else{
 			return juegoDTO;
 		}
+	}
+	
+	
+
+	public void crearJuego(JuegoDTO j) {
+		
+		SessionFactory sf = HibernateUtils.getSessionFactory();
+		Session s = sf.openSession();
+		s.beginTransaction();
+		ParejaDAO.getInstancia().crearPareja(j.getEquipo1());
+		ParejaDAO.getInstancia().crearPareja(j.getEquipo2());
+		Juego juego = new Juego(ParejaDAO.getInstancia().dtoToEntidad(j.getEquipo1()),ParejaDAO.getInstancia().dtoToEntidad(j.getEquipo2()), ModalidadDAO.getInstancia().dtoToEntidad(j.getModalidad()));
+		s.save(juego);
+		s.getTransaction().commit();
+		s.close();
 		
 	}
 }

@@ -25,7 +25,7 @@ public class Mazo {
 	
 	public Mazo(){
 		this.cartas = new ArrayList<Carta>();
-		llenarMazo();
+		//llenarMazo();
 	}
 	
 	private void llenarMazo() {

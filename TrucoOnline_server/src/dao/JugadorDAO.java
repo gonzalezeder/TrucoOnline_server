@@ -1,6 +1,5 @@
 package dao;
 
-import java.sql.JDBCType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,6 @@ import dtos.CategoriaDTO;
 import dtos.EstadisticaDTO;
 import dtos.JugadorDTO;
 import entities.Categoria;
-import entities.Estadistica;
 import entities.Jugador;
 
 public class JugadorDAO {
@@ -50,7 +48,7 @@ public class JugadorDAO {
 		s.close();
 		if(jug!=null){
 			for(Jugador j: jug){
-				CategoriaDTO cAux = new CategoriaDTO(j.getCategoria().getName(), j.getCategoria().getCantPartidas(),j.getCategoria().getPuntaje(),j.getCategoria().getPromedio());
+				CategoriaDTO cAux = CategoriaDAO.getInstancia().getCategoria(j.getCategoria().getIdCategoria());
 				EstadisticaDTO eAux = new EstadisticaDTO(j.getEstadistica().getIdEstadistica(),j.getEstadistica().getPartidasJugadas(),j.getEstadistica().getPartidasGanadas(),j.getEstadistica().getPartidasPerdidas(),j.getEstadistica().getPuntaje());
 				JugadorDTO juga = new JugadorDTO(j.getIdJugador(),j.getApodo(),j.getMail(),j.getPassword(),cAux,eAux);
 				jugDTO.add(juga);
@@ -67,18 +65,35 @@ public class JugadorDAO {
 		SessionFactory sf = HibernateUtils.getSessionFactory();
 		Session s = sf.openSession();
 		s.beginTransaction();
-		Jugador jug = (Jugador) s.createQuery("select j from Jugador where j.idJugador = :id")
+		Jugador jug = (Jugador) s.createQuery("select j from Jugador j where j.idJugador = :id")
 				.setInteger("id", idJugador).uniqueResult();
 		s.getTransaction().commit();
 		s.close();
 		if(jug!=null){
-			CategoriaDTO cAux = new CategoriaDTO(jug.getCategoria().getName(), jug.getCategoria().getCantPartidas(),jug.getCategoria().getPuntaje(),jug.getCategoria().getPromedio());
+			CategoriaDTO cAux = CategoriaDAO.getInstancia().getCategoria(jug.getCategoria().getIdCategoria());
+			
 			EstadisticaDTO eAux = new EstadisticaDTO(jug.getEstadistica().getIdEstadistica(),jug.getEstadistica().getPartidasJugadas(),jug.getEstadistica().getPartidasGanadas(),jug.getEstadistica().getPartidasPerdidas(),jug.getEstadistica().getPuntaje());
 			JugadorDTO jugador = new JugadorDTO(jug.getIdJugador(),jug.getApodo(),jug.getMail(),jug.getPassword(),cAux,eAux);
 			return jugador;
 		}
 		return null;
 	}
+	
+	public JugadorDTO entidadToDto(Jugador j){
+		JugadorDTO jug = new JugadorDTO(j.getIdJugador(), j.getApodo(), j.getMail(), j.getPassword(),
+				CategoriaDAO.getInstancia().entidadToDto(j.getCategoria()),
+				EstadisticaDAO.getInstancia().entidadToDto(j.getEstadistica()));
+		return jug;
+	}
+	
+	public Jugador dtoToEntidad(JugadorDTO j){
+		Jugador jug = new Jugador(j.getIdJugador(), j.getApodo(), j.getMail(), j.getPassword(),
+				CategoriaDAO.getInstancia().dtoToEntidad(j.getCategoria()),
+				EstadisticaDAO.getInstancia().dtoToEntidad(j.getEstadistica()));
+		return jug;
+	}
+	
+	
 }
 
 

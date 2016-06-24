@@ -21,6 +21,13 @@ public class Modalidad {
 	
 	
 	
+	public Modalidad(int modalidad, String nombre2) {
+		this.IdModalidad = modalidad;
+		this.nombre=nombre2;
+	}
+
+
+
 	public String getNombre() {
 		return nombre;
 	}
