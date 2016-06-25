@@ -2,6 +2,7 @@
 
 package entities;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 @Entity
 @Table(name = "Bazas")
 public class Baza { // aa
@@ -41,7 +41,7 @@ public class Baza { // aa
 	@JoinColumn(name = "IdPartida", insertable=false, updatable=false)
 	private Partida partida;
 	
-	@Transient //creo q no haria falta, xq a través de los movimientos se puede ver en qué estado está cada tanto. Capaz conviene hacerlo para que sea mas eficiente la busqueda
+//	@Transient //creo q no haria falta, xq a través de los movimientos se puede ver en qué estado está cada tanto. Capaz conviene hacerlo para que sea mas eficiente la busqueda
 	@OneToMany(cascade= CascadeType.ALL)
 	@JoinColumn(name = "idBaza")
 	private List<TipoCanto> cantosRealizados;
@@ -51,7 +51,7 @@ public class Baza { // aa
 	@JoinColumn(name = "idBaza")
 	private List<ManoJugador> manosJugadores;
 	
-	@Transient // hacerlo del tipo jugador...
+//	@Transient // hacerlo del tipo jugador...
 	private int jugMano;
 	
 	public Baza(){
