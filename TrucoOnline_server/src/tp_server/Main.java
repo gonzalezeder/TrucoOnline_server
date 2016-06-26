@@ -1,6 +1,6 @@
 package tp_server;
 
-import hibernate.test;
+import hibernate.Test;
 
 public class Main {
 
@@ -49,7 +49,7 @@ public class Main {
 	//	Controlador.getInstancia().verCartasJugador(1, 4);
 	//	Controlador.getInstancia().jugarCarta(1, 1, 1); //id Juego, idJugador, idCarta
 		
-		test aTest = new test();
+		Test aTest = new Test();
 		aTest.prueba();
 //		
 	}

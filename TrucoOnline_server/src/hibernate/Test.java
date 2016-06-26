@@ -7,7 +7,7 @@ import entities.Jugador;
 
 
 
-public class test {
+public class Test {
 	public void prueba (){
 	SessionFactory sf = HibernateUtils.getSessionFactory();
 	Session s = sf.openSession();
