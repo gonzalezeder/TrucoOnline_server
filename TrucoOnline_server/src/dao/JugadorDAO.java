@@ -92,7 +92,28 @@ public class JugadorDAO {
 				EstadisticaDAO.getInstancia().dtoToEntidad(j.getEstadistica()));
 		return jug;
 	}
+
+	public JugadorDTO finJugadorByApodo(String apodo) {
+		SessionFactory sf = HibernateUtils.getSessionFactory();
+		Session s = sf.openSession();
+		s.beginTransaction();
+		Jugador j = (Jugador) s
+				.createQuery("select j from Jugador j where j.apodo = :apodo")
+				.setString("apodo", apodo).uniqueResult();
+		JugadorDTO jDTO = this.entidadToDto(j);
+		return jDTO;
+	}
 	
+	public JugadorDTO finJugadorByMail(String mail) {
+		SessionFactory sf = HibernateUtils.getSessionFactory();
+		Session s = sf.openSession();
+		s.beginTransaction();
+		Jugador j = (Jugador) s.createQuery(
+				"select j from Jugador j where j.mail = :mail").setString(
+				"mail", mail).uniqueResult();
+
+		return this.entidadToDto(j);
+	}
 	
 }
 
