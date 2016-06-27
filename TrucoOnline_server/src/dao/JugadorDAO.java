@@ -1,9 +1,9 @@
 package dao;
 
+import hibernate.HibernateUtils;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import hibernate.HibernateUtils;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -23,7 +23,11 @@ public class JugadorDAO {
 		return instancia;
 	}
 	
-	public void GrabarJugador(JugadorDTO j){
+	/**
+	 * Solo para dar de alta el jugador ya que le crea una categoria novato por default
+	 * @param j
+	 */
+	public void crearJugador(JugadorDTO j){
 		Jugador jug = new Jugador(j.getApodo(),j.getMail(),j.getPassword());
 		
 		SessionFactory sf = HibernateUtils.getSessionFactory();
@@ -113,6 +117,24 @@ public class JugadorDAO {
 				"mail", mail).uniqueResult();
 
 		return this.entidadToDto(j);
+	}
+	
+	public List<Jugador> dtoToEntidad(List<JugadorDTO> p){
+		List<Jugador> jugadores = new ArrayList<Jugador>();
+		for(JugadorDTO aux: p){
+			Jugador jaux = dtoToEntidad(aux);
+			jugadores.add(jaux);
+		}
+		return jugadores;
+	}
+	
+	public List<JugadorDTO> entidadToDto(List<Jugador> p){
+		List<JugadorDTO> jugadores = new ArrayList<JugadorDTO>();
+		for(Jugador aux: p){
+			JugadorDTO jaux = entidadToDto(aux);
+			jugadores.add(jaux);
+		}
+		return jugadores;
 	}
 	
 }

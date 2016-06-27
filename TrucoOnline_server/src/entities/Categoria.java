@@ -17,7 +17,6 @@ public class Categoria implements Serializable {
 	private static final long serialVersionUID = -6108615890242743396L;
 
 	@Id
-	@GeneratedValue()
 	private int idCategoria;
 	
 	@Column(name = "categoria", length=60, nullable = false)

@@ -9,11 +9,11 @@ public class Main {
 
 		
 //
-		Controlador.getInstancia().altaJugador("Nicolas","Nicolas@gmail.com","contraseña", 1);
-		Controlador.getInstancia().altaJugador("Messi","leomessi@gmail.com","leomessi", 2);
-		Controlador.getInstancia().altaJugador("Santiago","Santiago@gmail.com","contraseña", 3);
-		Controlador.getInstancia().altaJugador("Eduardo","Eduardo@gmail.com","contraseña", 1);
-		Controlador.getInstancia().altaJugador("Eder","eder@gmail.com","contraseña", 4);
+		Controlador.getInstancia().altaJugador("Nicolas","Nicolas@gmail.com","contraseña");
+		Controlador.getInstancia().altaJugador("Messi","leomessi@gmail.com","leomessi");
+		Controlador.getInstancia().altaJugador("Santiago","Santiago@gmail.com","contraseña");
+		Controlador.getInstancia().altaJugador("Eduardo","Eduardo@gmail.com","contraseña");
+		Controlador.getInstancia().altaJugador("Eder","eder@gmail.com","contraseña");
 
 //		Controlador.getInstancia().imprimirCategorias();
 //		Controlador.getInstancia().imprimirJugadores();

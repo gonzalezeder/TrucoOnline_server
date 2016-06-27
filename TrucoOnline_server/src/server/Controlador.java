@@ -5,14 +5,17 @@ import interfaces.TDAManejoDatos;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import dao.CartaDAO;
 import dao.CategoriaDAO;
 import dao.JuegoDAO;
 import dao.JugadorDAO;
 import dao.LobbyDAO;
 import dao.ModalidadDAO;
+import dtos.CartaDTO;
 import dtos.CategoriaDTO;
 import dtos.JuegoDTO;
 import dtos.JugadorDTO;
@@ -20,12 +23,14 @@ import dtos.LobbyDTO;
 import dtos.ModalidadDTO;
 import dtos.ParejaDTO;
 
+@SuppressWarnings("serial")
 public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
 	private List<JugadorDTO> jugadores;
 	private List<LobbyDTO> lobby;
 	private List<CategoriaDTO> categorias;
 	private List<JuegoDTO> juegos;
-
+	private List<CartaDTO> cartas;
+	
 	private static Controlador instancia;
 
 	public Controlador() throws RemoteException {
@@ -34,7 +39,10 @@ public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
 		this.lobby = LobbyDAO.getInstancia().getAll();
 		this.categorias = CategoriaDAO.getInstancia().getAll();
 		this.juegos = JuegoDAO.getInstancia().getAll();
-
+		this.cartas =CartaDAO.getInstancia().getAll();
+		
+		
+		
 	}
 
 	public static Controlador getInstancia() {
@@ -47,16 +55,20 @@ public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
 			}
 		return instancia;
 	}
+	
+	@Override
+	public void nuevoJugador(JugadorDTO jugador) throws RemoteException {
+		JugadorDAO.getInstancia().crearJugador(jugador);
+	}
 
-	public void altaJugador(String apodo, String mail, String password, int categoria) {
+	public void altaJugador(String apodo, String mail, String password){ 
 		JugadorDTO j = buscarJugador(mail);
-		if (j == null) {
-			CategoriaDTO cat = new CategoriaDTO(categoria);
-			j = new JugadorDTO(0, apodo, mail, password, cat, null);
+		if (j==null){
+			j = new JugadorDTO(0,apodo,mail,password,null,null);
 			jugadores.add(j);
-			JugadorDAO.getInstancia().GrabarJugador(j);
+			JugadorDAO.getInstancia().crearJugador(j);
 			System.out.println("Se creó un jugador");
-		} else
+		}else
 			System.out.println("Ya existe un jugador registrado con ese mail");
 	}
 
@@ -206,62 +218,67 @@ public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
 	//
 	// }
 	private void crearJuegosIndividuales(int mod) {
-		List<JugadorDTO> jugadores = new ArrayList<JugadorDTO>();
+		List<JugadorDTO> jugadores = new ArrayList<JugadorDTO>(); 
 		ModalidadDTO m = ModalidadDAO.getInstancia().getModalidad(mod);
-		for (LobbyDTO l : lobby) {
-			if (l.getModalidad().getModalidad() == 1 && l.getJugando() == 0) {
+		for(LobbyDTO l: lobby){
+			if(l.getModalidad().getModalidad()==1 && l.getJugando()==0){
 				jugadores.add(l.getJugador());
 			}
-			if (jugadores.size() == 4) {
-				ParejaDTO eq1 = new ParejaDTO(jugadores.get(0),
-						jugadores.get(1));
-				ParejaDTO eq2 = new ParejaDTO(jugadores.get(1),
-						jugadores.get(2));
-				JuegoDTO j = new JuegoDTO(eq1, eq2, m);
-				juegos.add(j);
+			if(jugadores.size()==4){
+				ParejaDTO eq1 = new ParejaDTO(jugadores.get(0),jugadores.get(1));
+				ParejaDTO eq2 = new ParejaDTO(jugadores.get(2),jugadores.get(3));
+				JuegoDTO j = new JuegoDTO(eq1,eq2, m);
+				j.iniciarPartida();
 				JuegoDAO.getInstancia().crearJuego(j);
-				System.out.println("Juego Individual creado");
-				sacarJugadorModalidad(jugadores.get(0).getIdJugador(), mod, 1);
-				sacarJugadorModalidad(jugadores.get(1).getIdJugador(), mod, 1);
-				sacarJugadorModalidad(jugadores.get(2).getIdJugador(), mod, 1);
-				sacarJugadorModalidad(jugadores.get(3).getIdJugador(), mod, 1);
+				List<CartaDTO> mazo = getCartasMezcladas();
+				j.repartirCartas(mazo);
+				JuegoDAO.getInstancia().grabarJuego(j);
+				juegos.add(j);
+				System.out.println("\nJuego Individual creado");
+				sacarJugadorModalidad(jugadores.get(0).getIdJugador(), mod,1); 
+				sacarJugadorModalidad(jugadores.get(1).getIdJugador(), mod,1);
+				sacarJugadorModalidad(jugadores.get(2).getIdJugador(), mod,1);
+				sacarJugadorModalidad(jugadores.get(3).getIdJugador(), mod,1);
 				jugadores.clear();
-
 			}
-
+				
 		}
-		//
-		// if(libreIndividual.size()>=4){ // Hay que randomizarlo
-		// Pareja eq1 = new
-		// Pareja(libreIndividual.get(0),libreIndividual.get(1));
-		// Pareja eq2 = new
-		// Pareja(libreIndividual.get(2),libreIndividual.get(3));
-		// Juego j = new Juego(eq1, eq2);
-		// sacarJugadorLibreIndividual(eq1.getJugador1());
-		// sacarJugadorLibreIndividual(eq1.getJugador2());
-		// sacarJugadorLibreIndividual(eq2.getJugador1());
-		// sacarJugadorLibreIndividual(eq2.getJugador2());
-		// j.iniciarPartida();
-		// j.repartirCartas();
-		// juegos.add(j);
-		//
-		// }
-		// }
-
+//		
+//		if(libreIndividual.size()>=4){ // Hay que randomizarlo
+//				Pareja eq1 = new Pareja(libreIndividual.get(0),libreIndividual.get(1));
+//				Pareja eq2 = new Pareja(libreIndividual.get(2),libreIndividual.get(3));
+//				Juego j = new Juego(eq1, eq2);
+//				sacarJugadorLibreIndividual(eq1.getJugador1());
+//				sacarJugadorLibreIndividual(eq1.getJugador2());
+//				sacarJugadorLibreIndividual(eq2.getJugador1());
+//				sacarJugadorLibreIndividual(eq2.getJugador2());
+//				j.iniciarPartida();
+//				j.repartirCartas();
+//				juegos.add(j);
+//				
+//			}
+//		}
+	
+}
+	private List<CartaDTO> getCartasMezcladas() {
+		List<CartaDTO> cartasMezcladas = cartas;
+		Collections.shuffle(cartasMezcladas);
+		List<CartaDTO> doceCartas = new ArrayList<CartaDTO>();
+		int i = 0;
+		while (i< 12){
+			doceCartas.add(cartasMezcladas.get(i));
+			i++;
+		}
+		return doceCartas;
 	}
 
-	@Override
-	public JugadorDTO obtengoJugador(int nroJugador) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public List<CartaDTO> getCartas() {
+		return cartas;
 	}
-
-	@Override
-	public void envioJugador(JugadorDTO jugador) throws RemoteException {
-		// TODO Auto-generated method stub
-
+	public void setCartas(List<CartaDTO> cartas) {
+		this.cartas = cartas;
 	}
-
 	@Override
 	public Set<JugadorDTO> obtengoJugadores() throws RemoteException {
 		// TODO Auto-generated method stub
@@ -294,5 +311,19 @@ public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
 		
 		return false;
 	}
+
+	@Override
+	public JugadorDTO obtengoJugador(int nroJugador) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void envioJugador(JugadorDTO jugador) throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 
 }

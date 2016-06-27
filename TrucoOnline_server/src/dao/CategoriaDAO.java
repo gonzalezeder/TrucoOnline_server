@@ -9,7 +9,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import dtos.CategoriaDTO;
+import dtos.CategoriaDTO;
+import dtos.JugadorDTO;
 import entities.Categoria;
+import entities.Estadistica;
+import entities.Jugador;
 
 public class CategoriaDAO  {
 	private static CategoriaDAO instancia;

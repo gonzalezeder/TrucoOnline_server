@@ -23,15 +23,30 @@ public class Carta {
 	@Column(name = "valorEnvido", nullable=false, columnDefinition = "int")
 	private int valorEnvido;
 	
+	@Column(name = "archivo", nullable=false, length = 50)
+	private String archivo;
+	
 	private static int ultNum;
 
-	public Carta(int numero, String palo, int env){
+	public Carta(int numero, String palo, int env, String archivo){
 		this.idCarta = getUltNum();
 		this.numero = numero;
 		this.palo = palo;
 		this.valorEnvido = env;
+		this.archivo=archivo;
 	}
 	
+	public Carta(int idCarta, int numero, String palo, int env, String archivo){
+		this.idCarta = idCarta;
+		this.numero = numero;
+		this.palo = palo;
+		this.valorEnvido = env;
+		this.archivo=archivo;
+	}
+	
+	public Carta(){
+		
+	}
 	
 	private int getUltNum(){
 		return ultNum++;
@@ -60,6 +75,14 @@ public class Carta {
 	}
 	public void setValorEnvido(int valorEnvido) {
 		this.valorEnvido = valorEnvido;
+	}
+
+	public String getArchivo() {
+		return archivo;
+	}
+
+	public void setArchivo(String archivo) {
+		this.archivo = archivo;
 	}
 	
 

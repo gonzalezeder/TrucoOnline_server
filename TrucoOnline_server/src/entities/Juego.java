@@ -2,16 +2,21 @@ package entities;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -20,6 +25,11 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.apache.commons.collections.functors.FalsePredicate;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import dao.CartaDAO;
+import dtos.JugadorDTO;
 @Entity
 @Table(name ="Juegos")
 public class Juego {
@@ -43,40 +53,67 @@ public class Juego {
 	@JoinColumn(name="idEstado", referencedColumnName= "idEstado")
 	private Estado estado;
 	
-	@OneToMany(cascade= CascadeType.ALL)
-	@JoinColumn(name = "idJuego")
+//	
+//	@LazyCollection(LazyCollectionOption.FALSE)
+//	@OneToMany(cascade= CascadeType.ALL)
+//	@JoinColumn(name = "idJuego")
+//	
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany(cascade=CascadeType.ALL)
+	 @JoinTable(name = "Partidas_Juego",  joinColumns = @JoinColumn(name="idJuego"), inverseJoinColumns = @JoinColumn(name="idPartida"))
 	private List<Partida> partidas;
 	
-	private static int ultNum=1;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "idMazo", referencedColumnName = "idMazo")
-	private Mazo mazo;
-	
+//	
+//	@LazyCollection(LazyCollectionOption.FALSE)
+//	@ManyToMany()
+//	 @JoinTable(name = "Cartas_Juego",  joinColumns = @JoinColumn(name="idJuego"), inverseJoinColumns = @JoinColumn(name="idCarta"))
+//	private List<Carta> cartas;
+//	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idTipoJuego", referencedColumnName = "idTipoJuego")
 	private Modalidad modalidad;
 	
+	@Transient
+	private static int ultNum;
+	
+
 	
 	// Recordar para formatear la fecha!! SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss [.fffffffff]");
 	
 	public Juego (Pareja e1, Pareja e2, Modalidad mod){
+		//this.idJuego=getUltNum();
 		this.equipo1=e1;
 		this.equipo2 =e2;
 		this.estado = new Estado(1, "Creado");
 		this.fechaJuego = new Date();
 		partidas = new ArrayList<Partida>();
-		this.mazo = new Mazo();
 		this.modalidad = mod;
+	}
+	
+	private int getUltNum() {
+		return ultNum++;
+	}
+
+	public Juego(int idJuego, Date fechaJuego, Pareja equipo1, Pareja equipo2,
+			Estado estado, List<Partida> partidas,
+			Modalidad modalidad) {
+		this.idJuego = idJuego;
+		this.fechaJuego = fechaJuego;
+		this.equipo1 = equipo1;
+		this.equipo2 = equipo2;
+		this.estado = estado;
+		this.partidas = partidas;
+		this.modalidad = modalidad;
 	}
 
 	public Juego(){
 		
 	}
 	
+	
 	public Partida iniciarPartida(){
 		if(partidas.size() <3 ){
-			Partida p = new Partida();
+			Partida p = new Partida(getJugadoresOrdenados());
 			partidas.add(p);
 			return p;
 		}else{
@@ -84,6 +121,10 @@ public class Juego {
 		}		
 	}
 	
+	private Jugador getMano() { // HACER, devuelve un jugador aleatorio como mano
+		return equipo1.getJugador1();
+	}
+
 	public void repartirCartas(){
 		
 		Partida p = buscarPartidaEnCurso();
@@ -93,21 +134,38 @@ public class Juego {
 				System.out.println("Ya se jugaron las tres partidas.");
 		}
 		int i = partidas.indexOf(p);
-		p.repartirCartas(mazo, getJugadoresOrdenados());
+//		p.repartirCartas(mazo, getJugadoresOrdenados());
 		partidas.set(i,p);
 		
 	}
 	
 	private List<Jugador> getJugadoresOrdenados(){
-		List<Jugador> jugadores = new ArrayList<Jugador>();
-		if(equipo1 !=null && equipo2 != null){
-			jugadores.add(this.equipo1.getJugador1());
-			jugadores.add(this.equipo2.getJugador1());
-			jugadores.add(this.equipo1.getJugador2());
-			jugadores.add(this.equipo2.getJugador2());
-			return jugadores;
-		} else
-			return null;
+		 List<Jugador> jugadores = new ArrayList<Jugador>();
+		 Random rand= new Random();
+		 int numero = rand.nextInt((4-1)+1)+ 1;
+		 switch(numero){
+		 case 1:
+			 jugadores.add(equipo1.getJugador1());
+			 jugadores.add(equipo2.getJugador1());
+			 jugadores.add(equipo1.getJugador2());
+			 jugadores.add(equipo2.getJugador2());
+		 case 2:
+			 jugadores.add(equipo2.getJugador1());
+			 jugadores.add(equipo1.getJugador1());
+			 jugadores.add(equipo2.getJugador2());
+			 jugadores.add(equipo1.getJugador2());
+		 case 3:
+			 jugadores.add(equipo1.getJugador2());
+			 jugadores.add(equipo2.getJugador1());
+			 jugadores.add(equipo1.getJugador1());
+			 jugadores.add(equipo2.getJugador2());
+		 case 4:
+			 jugadores.add(equipo2.getJugador2());
+			 jugadores.add(equipo1.getJugador1());
+			 jugadores.add(equipo2.getJugador1());
+			 jugadores.add(equipo1.getJugador2());
+		 }
+		return jugadores;
 	}
 	
 	public Partida buscarPartidaEnCurso(){
@@ -118,26 +176,26 @@ public class Juego {
 		return null;
 	}
 	
-	public Jugador verTurno(){
-		Partida p = buscarPartidaEnCurso();
-		int turno;
-		if(p!=null){
-			turno = p.verTurno();
-			switch(turno){
-				case 1:
-					return equipo1.getJugador1();
-				case 2:
-					return equipo2.getJugador1();
-				case 3:
-					return equipo1.getJugador2();
-				case 4:
-					return equipo2.getJugador2();
-				case -1: 
-					System.out.println("No hay baza en curso");
-				}
-		}
-		return null;
-	}
+//	public Jugador verTurno(){
+//		Partida p = buscarPartidaEnCurso();
+//		int turno;
+//		if(p!=null){
+//			turno = p.verTurno();
+//			switch(turno){
+//				case 1:
+//					return equipo1.getJugador1();
+//				case 2:
+//					return equipo2.getJugador1();
+//				case 3:
+//					return equipo1.getJugador2();
+//				case 4:
+//					return equipo2.getJugador2();
+//				case -1: 
+//					System.out.println("No hay baza en curso");
+//				}
+//		}
+//		return null;
+//	}
 	
 	public List<Carta> verCartas(int idJugador){
 		Partida p = buscarPartidaEnCurso();
@@ -243,12 +301,16 @@ public class Juego {
 					b.jugarCarta(j, carta);
 			}
 		}
-			
-			
-		
-		
+				
 	}
 
-	
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
 	
 }

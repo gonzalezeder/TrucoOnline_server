@@ -38,13 +38,19 @@ public class ParejaDAO {
 	
 	
 	public ParejaDTO entidadToDto(Pareja p){
-		ParejaDTO par = new ParejaDTO(JugadorDAO.getInstancia().entidadToDto(p.getJugador1()),JugadorDAO.getInstancia().entidadToDto(p.getJugador2()));
-		return par;
+		if(p!=null){
+			ParejaDTO par = new ParejaDTO(JugadorDAO.getInstancia().entidadToDto(p.getJugador1()),JugadorDAO.getInstancia().entidadToDto(p.getJugador2()));
+			return par;
+		}
+		return null;
 	}
 	
 	public Pareja dtoToEntidad(ParejaDTO p){
-		Pareja par = new Pareja(JugadorDAO.getInstancia().dtoToEntidad(p.getJugador1()),JugadorDAO.getInstancia().dtoToEntidad(p.getJugador2()));
-		return par;
+		if(p!=null){
+			Pareja par = new Pareja(JugadorDAO.getInstancia().dtoToEntidad(p.getJugador1()),JugadorDAO.getInstancia().dtoToEntidad(p.getJugador2()));
+			return par;
+		}else
+			return null;
 	}
 
 	public void crearPareja(ParejaDTO p) {

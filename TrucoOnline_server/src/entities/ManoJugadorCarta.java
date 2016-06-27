@@ -20,23 +20,31 @@ public class ManoJugadorCarta {
 	private int idManoJugadorCarta;
 	
 	@Column(name="jugada", columnDefinition = "smallint", nullable = false)
-	private int jugada;
+	private boolean jugada;
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="idCarta", referencedColumnName="idCarta",nullable=false)
 	private Carta carta;
 	
 	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name = "idManoJugador", insertable=false, updatable=false)
+	@JoinColumn(name = "IdManoJugador", insertable=false, updatable=false)
 	private ManoJugador manoJugador;
 
+	
+	
 	
 	public ManoJugadorCarta(){
 	}
 	
+	public ManoJugadorCarta(int idManoJugadorCarta, boolean jugada, Carta carta) {
+		this.idManoJugadorCarta = idManoJugadorCarta;
+		this.jugada = jugada;
+		this.carta = carta;
+	}
+
 	public ManoJugadorCarta(Carta carta) {
 		
-		this.jugada = 0;
+		this.jugada = false;
 		this.carta = carta;
 		
 	}
@@ -49,13 +57,7 @@ public class ManoJugadorCarta {
 		this.idManoJugadorCarta = idManoJugadorCarta;
 	}
 
-	public int getJugada() {
-		return jugada;
-	}
 
-	public void setJugada(int jugada) {
-		this.jugada = jugada;
-	}
 
 	
 	
@@ -67,12 +69,14 @@ public class ManoJugadorCarta {
 		this.carta = carta;
 	}
 
-	public ManoJugador getManoJugador() {
-		return manoJugador;
+
+
+	public boolean isJugada() {
+		return jugada;
 	}
 
-	public void setManoJugador(ManoJugador manoJugador) {
-		this.manoJugador = manoJugador;
+	public void setJugada(boolean jugada) {
+		this.jugada = jugada;
 	}
 	
 	
