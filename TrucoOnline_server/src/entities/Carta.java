@@ -2,8 +2,6 @@ package entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -23,25 +21,30 @@ public class Carta {
 	@Column(name = "valorEnvido", nullable=false, columnDefinition = "int")
 	private int valorEnvido;
 	
+	@Column(name = "valorTruco", nullable = false, columnDefinition = "int")
+	private int valorTruco;
+	
 	@Column(name = "archivo", nullable=false, length = 50)
 	private String archivo;
 	
 	private static int ultNum;
 
-	public Carta(int numero, String palo, int env, String archivo){
+	public Carta(int numero, String palo, int env, String archivo, int valorTruco){
 		this.idCarta = getUltNum();
 		this.numero = numero;
 		this.palo = palo;
 		this.valorEnvido = env;
 		this.archivo=archivo;
+		this.valorTruco=valorTruco;
 	}
 	
-	public Carta(int idCarta, int numero, String palo, int env, String archivo){
+	public Carta(int idCarta, int numero, String palo, int env, String archivo, int valorTruco){
 		this.idCarta = idCarta;
 		this.numero = numero;
 		this.palo = palo;
 		this.valorEnvido = env;
 		this.archivo=archivo;
+		this.valorTruco=valorTruco;
 	}
 	
 	public Carta(){
@@ -83,6 +86,14 @@ public class Carta {
 
 	public void setArchivo(String archivo) {
 		this.archivo = archivo;
+	}
+
+	public int getValorTruco() {
+		return valorTruco;
+	}
+
+	public void setValorTruco(int valorTruco) {
+		this.valorTruco = valorTruco;
 	}
 	
 

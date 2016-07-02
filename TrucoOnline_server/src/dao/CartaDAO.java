@@ -47,12 +47,12 @@ private static CartaDAO instancia;
 	}
 	
 	public CartaDTO entidadToDto(Carta c){
-		CartaDTO car = new CartaDTO(c.getIdCarta(),c.getNumero(),c.getPalo(),c.getValorEnvido(),c.getArchivo());
+		CartaDTO car = new CartaDTO(c.getIdCarta(),c.getNumero(),c.getPalo(),c.getValorEnvido(),c.getArchivo(),c.getValorTruco());
 		return car;
 	}
 	
 	public Carta dtoToEntidad(CartaDTO c){
-		Carta car = new Carta(c.getIdCarta(),c.getNumero(),c.getPalo(),c.getValorEnvido(),c.getArchivo());
+		Carta car = new Carta(c.getIdCarta(),c.getNumero(),c.getPalo(),c.getValorEnvido(),c.getArchivo(),c.getValorTruco());
 		return car;
 	}
 	

@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -35,16 +36,21 @@ public class Baza { // aa
 	@JoinColumn(name="idEstado", referencedColumnName= "idEstado")
 	private Estado estado; //1 En curso, 2 Finalizada
 	
+	
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade= CascadeType.ALL)
-	@JoinColumn(name = "idMano")
+	@OrderBy("idMano")
+	@JoinColumn(name = "idBaza")
 	private List<Mano> manos= new ArrayList<Mano>();
 	
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name = "idDetalle")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade= CascadeType.ALL)
+	@OrderBy("idDetalle")
+	@JoinColumn(name = "idBaza")
 	private List<DetallePunto> puntos = new ArrayList<DetallePunto>();
 	
 	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name = "IdPartida", insertable=false, updatable=false)
+	@JoinColumn(name = "idPartida", insertable=false, updatable=false)
 	private Partida partida;
 	
 	@Transient //creo q no haria falta, xq a través de los movimientos se puede ver en qué estado está cada tanto. Capaz conviene hacerlo para que sea mas eficiente la busqueda
@@ -54,15 +60,17 @@ public class Baza { // aa
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade= CascadeType.ALL)
+	@OrderBy("idManoJugador")
 	@JoinColumn(name = "idBaza")
 	private List<ManoJugador> manosJugadores;
 	
 	@OneToOne()
+	//@JoinColumn(name= "JugadorMano")
 	@JoinColumn(name= "idJugador")
 	private Jugador jugMano;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany()
+	@ManyToMany(cascade=CascadeType.MERGE)
 	 @JoinTable(name = "Cartas_Baza",  joinColumns = @JoinColumn(name="idBaza"), inverseJoinColumns = @JoinColumn(name="idCarta"))
 	private List<Carta> cartas;
 	
@@ -211,6 +219,7 @@ public class Baza { // aa
 						int aux = manos.indexOf(m);
 						m.jugar(j,c);
 						manos.set(aux, m);
+						
 						
 					}
 				}

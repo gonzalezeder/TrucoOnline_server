@@ -45,7 +45,7 @@ public class Pareja {
 	public void setJugador2(Jugador jugador2) {
 		this.jugador2 = jugador2;
 	}
-
+	
 	public boolean pertenece(Jugador jug) {
 		if(jugador1 == jug || jugador2 == jug)
 			return true;

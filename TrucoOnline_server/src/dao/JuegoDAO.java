@@ -18,6 +18,7 @@ import dtos.PartidaDTO;
 import entities.Juego;
 import entities.Jugador;
 import entities.Mazo;
+import entities.Partida;
 
 public class JuegoDAO {
 	private static JuegoDAO instancia;
@@ -39,8 +40,7 @@ public class JuegoDAO {
 		s.close();
 		if(juegos!=null){
 			for(Juego j: juegos){
-				//MazoDTO m = new MazoDTO();
-				//m.setCartas(CartaDAO.getInstancia().entidadToDto(j.getMazo().getCartas()));
+	
 				JuegoDTO jug = new JuegoDTO(j.getIdJuego(),j.getFechaJuego(),ParejaDAO.getInstancia().entidadToDto(j.getEquipo1()),ParejaDAO.getInstancia().entidadToDto(j.getEquipo2()),EstadoDAO.getInstancia().entidadToDto(j.getEstado()),PartidaDAO.getInstancia().entidadToDto(j.getPartidas()), ModalidadDAO.getInstancia().entidadToDto(j.getModalidad()));
 				juegoDTO.add(jug);
 			}
@@ -89,7 +89,6 @@ public class JuegoDAO {
 		s.saveOrUpdate(juego);
 		s.getTransaction().commit();
 		s.close();
-//		PartidaDAO.getInstancia().crearPartida(j, cartas);
 	}
 	
 	public JuegoDTO entidadToDto(Juego j){

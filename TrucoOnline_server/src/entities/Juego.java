@@ -19,6 +19,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -41,34 +42,25 @@ public class Juego {
 	@Temporal(TemporalType.DATE)
 	private Date fechaJuego;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "equipo1")
 	private Pareja equipo1;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "equipo2", referencedColumnName = "idPareja")
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name = "equipo2")
 	private Pareja equipo2;
 	
 	@OneToOne()
 	@JoinColumn(name="idEstado", referencedColumnName= "idEstado")
 	private Estado estado;
 	
-//	
-//	@LazyCollection(LazyCollectionOption.FALSE)
-//	@OneToMany(cascade= CascadeType.ALL)
-//	@JoinColumn(name = "idJuego")
-//	
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany(cascade=CascadeType.ALL)
-	 @JoinTable(name = "Partidas_Juego",  joinColumns = @JoinColumn(name="idJuego"), inverseJoinColumns = @JoinColumn(name="idPartida"))
-	private List<Partida> partidas;
 	
-//	
-//	@LazyCollection(LazyCollectionOption.FALSE)
-//	@ManyToMany()
-//	 @JoinTable(name = "Cartas_Juego",  joinColumns = @JoinColumn(name="idJuego"), inverseJoinColumns = @JoinColumn(name="idCarta"))
-//	private List<Carta> cartas;
-//	
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade= CascadeType.ALL)
+	@OrderBy("idPartida")
+	@JoinColumn(name = "idJuego")
+	private List<Partida> partidas;
+		
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idTipoJuego", referencedColumnName = "idTipoJuego")
 	private Modalidad modalidad;

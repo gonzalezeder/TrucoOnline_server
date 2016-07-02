@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -26,30 +27,38 @@ import org.hibernate.annotations.LazyCollectionOption;
 public class Partida {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	
 	private int idPartida;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade= CascadeType.ALL)
+	@OrderBy("idBaza")
 	@JoinColumn(name = "idPartida")
 	private List<Baza> bazas;
 	
-	@OneToOne(cascade =CascadeType.ALL)
+	@OneToOne()
 	@JoinColumn(name="idEstado", referencedColumnName= "idEstado")
 	private Estado estado; //1 En curso, 2 Finalizada
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne()
 	@JoinColumn(name = "parejaGanadora")
 	private Pareja parejaGanadora;
+
 	
-//	@ManyToOne(cascade=CascadeType.ALL)
-//	@JoinColumn(name = "idJuego", insertable=false, updatable=false)
-//	private Juego juego;
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name = "idJuego", insertable=false, updatable=false)
+	private Juego juego;
 	
 
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany(cascade=CascadeType.ALL)
+	@ManyToMany(cascade=CascadeType.MERGE)
 	 @JoinTable(name = "Partida_jugadores",  joinColumns = @JoinColumn(name="idPartida"), inverseJoinColumns = @JoinColumn(name="idJugador"))
 	private List<Jugador> orden;
+	
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany(cascade=CascadeType.MERGE)
+	 @JoinTable(name = "Partida_orden_jugadores",  joinColumns = @JoinColumn(name="idPartida"), inverseJoinColumns = @JoinColumn(name="idJugador"))
+	private List<Jugador> ordenOriginal;
 	
 	public Partida (){
 	}
@@ -58,18 +67,20 @@ public class Partida {
 		this.bazas = new ArrayList<Baza>();
 		this.parejaGanadora = null;
 		this.estado = new Estado(1, "Creado");
-		this.orden = j; //Inicializo en -1. Siempre va a indicar qué jugador es mano en la baza
+		this.orden = j; 
+		this.ordenOriginal = j;
 		
 	}
 
 	
 	public Partida(int idPartida, List<Baza> bazas, Estado estado,
-			Pareja parejaGanadora, List<Jugador> j) {
+			Pareja parejaGanadora, List<Jugador> j, List<Jugador> o) {
 		this.idPartida = idPartida;
 		this.bazas = bazas;
 		this.estado = estado;
 		this.parejaGanadora = parejaGanadora;
 		this.orden = j;
+		this.ordenOriginal = o;
 	}
 
 
@@ -176,6 +187,22 @@ public class Partida {
 	
 	public void setBazas(List<Baza> bazas) {
 		this.bazas = bazas;
+	}
+
+	public List<Jugador> getOrden() {
+		return orden;
+	}
+
+	public void setOrden(List<Jugador> orden) {
+		this.orden = orden;
+	}
+
+	public List<Jugador> getOrdenOriginal() {
+		return ordenOriginal;
+	}
+
+	public void setOrdenOriginal(List<Jugador> ordenOriginal) {
+		this.ordenOriginal = ordenOriginal;
 	}
 	
 	

@@ -26,13 +26,55 @@ public class DetallePunto {
 	@JoinColumn(name = "tipo", referencedColumnName = "idTipoCanto")
 	private TipoCanto tipo;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "equipo")
-	private Pareja equipo;
+	@Column(name="equipo",nullable=false)
+	private int equipo;
 	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "IdBaza", insertable=false, updatable=false)
 	private Baza baza;
 
+	public DetallePunto(int idDetalle, int puntos, TipoCanto tipo, int equipo) {
+		this.idDetalle = idDetalle;
+		this.puntos = puntos;
+		this.tipo = tipo;
+		this.equipo = equipo;
+	}
+	
+	public DetallePunto(){
+		
+	}
+
+	public int getIdDetalle() {
+		return idDetalle;
+	}
+
+	public void setIdDetalle(int idDetalle) {
+		this.idDetalle = idDetalle;
+	}
+
+	public int getPuntos() {
+		return puntos;
+	}
+
+	public void setPuntos(int puntos) {
+		this.puntos = puntos;
+	}
+
+	public TipoCanto getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoCanto tipo) {
+		this.tipo = tipo;
+	}
+
+	public int getEquipo() {
+		return equipo;
+	}
+
+	public void setEquipo(int equipo) {
+		this.equipo = equipo;
+	}
+	
 	
 }

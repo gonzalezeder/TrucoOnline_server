@@ -20,16 +20,16 @@ public class Movimiento {
 	@Column(name = "idMovimiento")
 	private int idMovimiento;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne()
 	@JoinColumn(name= "idJugador", referencedColumnName = "idJugador")
 	private Jugador jugador;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne()
 	@JoinColumn(name= "idTipoCanto", referencedColumnName = "idTipoCanto")
 	private TipoCanto canto;
 	
-	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name= "idCarta", referencedColumnName = "idCarta")
+	@OneToOne()
+	@JoinColumn(name="idCarta", referencedColumnName="idCarta",nullable=false)
 	private Carta carta;
 	
 	@Column(name = "envido", nullable=false, columnDefinition = "int")
@@ -46,8 +46,21 @@ public class Movimiento {
 		this.setEnvido(envido);
 	}
 
+	public Movimiento(){
+		
+	}
 	
-	
+	public Movimiento(int idMovimiento, Jugador jugador, TipoCanto canto,
+			Carta carta, int envido) {
+		this.idMovimiento = idMovimiento;
+		this.jugador = jugador;
+		this.canto = canto;
+		this.carta = carta;
+		this.envido = envido;
+	}
+
+
+
 	public TipoCanto getCanto() {
 		return canto;
 	}
@@ -82,6 +95,18 @@ public class Movimiento {
 
 	public void setEnvido(int envido) {
 		this.envido = envido;
+	}
+
+
+
+	public int getIdMovimiento() {
+		return idMovimiento;
+	}
+
+
+
+	public void setIdMovimiento(int idMovimiento) {
+		this.idMovimiento = idMovimiento;
 	}
 
 }

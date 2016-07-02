@@ -22,7 +22,7 @@ public class ManoJugadorCarta {
 	@Column(name="jugada", columnDefinition = "smallint", nullable = false)
 	private boolean jugada;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne()
 	@JoinColumn(name="idCarta", referencedColumnName="idCarta",nullable=false)
 	private Carta carta;
 	

@@ -15,6 +15,7 @@ import dao.JuegoDAO;
 import dao.JugadorDAO;
 import dao.LobbyDAO;
 import dao.ModalidadDAO;
+import dao.TipoCantoDAO;
 import dtos.CartaDTO;
 import dtos.CategoriaDTO;
 import dtos.JuegoDTO;
@@ -22,6 +23,7 @@ import dtos.JugadorDTO;
 import dtos.LobbyDTO;
 import dtos.ModalidadDTO;
 import dtos.ParejaDTO;
+import dtos.TipoCantoDTO;
 
 @SuppressWarnings("serial")
 public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
@@ -30,16 +32,18 @@ public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
 	private List<CategoriaDTO> categorias;
 	private List<JuegoDTO> juegos;
 	private List<CartaDTO> cartas;
+	private List<TipoCantoDTO> cantos;
 	
 	private static Controlador instancia;
 
 	public Controlador() throws RemoteException {
 
+		this.categorias = CategoriaDAO.getInstancia().getAll();
 		this.jugadores = JugadorDAO.getInstancia().getAll();
 		this.lobby = LobbyDAO.getInstancia().getAll();
-		this.categorias = CategoriaDAO.getInstancia().getAll();
 		this.juegos = JuegoDAO.getInstancia().getAll();
 		this.cartas =CartaDAO.getInstancia().getAll();
+		this.cantos=TipoCantoDAO.getInstancia().getAll();
 		
 		
 		
@@ -56,15 +60,15 @@ public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
 		return instancia;
 	}
 	
-	@Override
-	public void nuevoJugador(JugadorDTO jugador) throws RemoteException {
-		JugadorDAO.getInstancia().crearJugador(jugador);
-	}
+//	@Override
+//	public void nuevoJugador(JugadorDTO jugador) throws RemoteException {
+//		JugadorDAO.getInstancia().crearJugador(jugador);
+//	}
 
 	public void altaJugador(String apodo, String mail, String password){ 
 		JugadorDTO j = buscarJugador(mail);
 		if (j==null){
-			j = new JugadorDTO(0,apodo,mail,password,null,null);
+			j = new JugadorDTO(0,apodo,mail,password,categorias.get(0),null);
 			jugadores.add(j);
 			JugadorDAO.getInstancia().crearJugador(j);
 			System.out.println("Se creó un jugador");
@@ -122,6 +126,13 @@ public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
 		return null;
 	}
 
+	private JuegoDTO buscarJuego(int idJuego) {
+		for (JuegoDTO j : juegos)
+			if (j.getIdJuego() == idJuego)
+				return j;
+		return null;
+	}
+	
 	// public List<Jugador> verJugadoresOnline(){
 	// List<Jugador> jugs = Lobby.getInstancia().verJugadoresOnline();
 	// System.out.println("---------------------------Jugadores Online---------------------------");
@@ -152,6 +163,7 @@ public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
 				System.out.println("La modalidad ingresada no existe");
 		} else
 			System.out.println("El jugador no existe");
+		crearJuegos();
 	}
 
 	private boolean estaAnotado(JugadorDTO j, ModalidadDTO m) {
@@ -161,16 +173,7 @@ public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
 		return false;
 	}
 
-	public void sacarJugadorModalidad(int idJugador, int mod, int est) { // 0
-																			// Disponible,
-																			// 1
-																			// Jugando,
-																			// 2
-																			// cancelo
-																			// el
-																			// juego,
-																			// 3
-																			// terminó.
+	public void sacarJugadorModalidad(int idJugador, int mod, int est) { // 0 Disponible, 1 Jugando, 2 cancelo el juego, 3 terminó.
 		JugadorDTO j = buscarJugadorPorId(idJugador);
 		if (j != null) {
 			ModalidadDTO m = ModalidadDAO.getInstancia().getModalidad(mod);
@@ -196,27 +199,53 @@ public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
 			System.out.println("El jugador no existe");
 	}
 
-	// public void verCartasJugador(int idJuego, int idJugador){
-	// List<Carta> cartas = Lobby.getInstancia().verCartas(idJuego, idJugador);
-	// int i = 1;
-	// if(cartas !=null){
-	// System.out.println("\nCartas del jugador "+idJugador);
-	// for(Carta c: cartas){
-	// System.out.println("Carta "+i+": "+c.getNumero()+" de "+c.getPalo());
-	// i++;
-	// }
-	// }
-	// else
-	// System.out.println("Ocurrió un error al repartir");
-	// }
+	 public void verCartasJugador(int idJuego, int idJugador){
+	 List<CartaDTO> cartasJug = new ArrayList<CartaDTO>(); 
+	 JuegoDTO juego = buscarJuego(idJuego);
+	 if(juego!=null){
+		 JugadorDTO jug = buscarJugadorPorId(idJugador);
+		 if(jug!=null){
+			 cartasJug = juego.verCartas(jug);
+			 
+		 }
+	 }
+	 int i = 1;
+	 if(cartasJug !=null){
+		 System.out.println("\nCartas del jugador "+idJugador);
+		 for(CartaDTO c: cartasJug){
+			 System.out.println("("+c.getIdCarta()+")Carta "+i+": "+c.getNumero()+" de "+c.getPalo());
+			 i++;
+		 }
+	 }
+	 else
+		 System.out.println("Ocurrió un error");
+	 }
+	 
+	 public void verCartasJugables(int idJuego, int idJugador){
+		 List<CartaDTO> cartasJug = new ArrayList<CartaDTO>(); 
+		 JuegoDTO juego = buscarJuego(idJuego);
+		 if(juego!=null){
+			 JugadorDTO jug = buscarJugadorPorId(idJugador);
+			 if(jug!=null){
+				 cartasJug = juego.verCartasJugables(jug);
+			 }
+		 }
+		 int i = 1;
+		 if(cartasJug !=null){
+			 System.out.println("\nCartas del jugador "+idJugador);
+			 for(CartaDTO c: cartasJug){
+				 System.out.println("("+c.getIdCarta()+")Carta "+i+": "+c.getNumero()+" de "+c.getPalo());
+				 i++;
+			 }
+		 }
+		 else
+			 System.out.println("Ocurrió un error");
+		 }
+	 
 	public void crearJuegos() {
 		crearJuegosIndividuales(1);
 	}
 
-	// public void jugarCarta(int idJuego, int jugador, int carta) {
-	// Lobby.getInstancia().jugarCarta(idJuego, jugador, carta);
-	//
-	// }
 	private void crearJuegosIndividuales(int mod) {
 		List<JugadorDTO> jugadores = new ArrayList<JugadorDTO>(); 
 		ModalidadDTO m = ModalidadDAO.getInstancia().getModalidad(mod);
@@ -229,6 +258,8 @@ public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
 				ParejaDTO eq2 = new ParejaDTO(jugadores.get(2),jugadores.get(3));
 				JuegoDTO j = new JuegoDTO(eq1,eq2, m);
 				j.iniciarPartida();
+				
+				
 				JuegoDAO.getInstancia().crearJuego(j);
 				List<CartaDTO> mazo = getCartasMezcladas();
 				j.repartirCartas(mazo);
@@ -244,6 +275,8 @@ public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
 				
 		}
 //		
+		
+		
 //		if(libreIndividual.size()>=4){ // Hay que randomizarlo
 //				Pareja eq1 = new Pareja(libreIndividual.get(0),libreIndividual.get(1));
 //				Pareja eq2 = new Pareja(libreIndividual.get(2),libreIndividual.get(3));
@@ -259,7 +292,96 @@ public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
 //			}
 //		}
 	
-}
+	}
+	
+	public void repartir(int idJuego){ //agregar control de si ya existe baza en juego
+		JuegoDTO j = buscarJuego(idJuego);
+		if(j!=null){
+			List<CartaDTO> mazo = getCartasMezcladas();
+			int i = juegos.indexOf(j);
+			j.repartirCartas(mazo);
+			JuegoDAO.getInstancia().grabarJuego(j);
+			juegos.set(i,j);
+		}else
+			System.out.println("El juego ingresado no existe");
+		
+	}
+	
+	public void verTurno(int idJuego){
+		JuegoDTO juego = buscarJuego(idJuego);
+		if(juego !=null){
+			JugadorDTO j = juego.verTurno();
+			if(j!=null)
+				System.out.println("\nEs el turno de "+j.getApodo()+"("+j.getIdJugador()+")");
+		}
+	}
+	
+	public void verCantosDisponibles(int idJuego){
+		
+	}
+	
+	public void cantar(int idJuego, int idJugador, int idCanto){
+		JuegoDTO juego = buscarJuego(idJuego);
+		if(juego !=null){
+			JugadorDTO jug = buscarJugadorPorId(idJugador);
+			if(jug!=null){
+				if(juego.validarTurno(jug)){
+					TipoCantoDTO canto = buscarCanto(idCanto);
+					if(canto!=null){
+						if(juego.Cantar(jug, canto)){
+							System.out.println("\nEl jugador "+jug.getApodo()+" ha cantado "+canto.getDescCorta());
+							JuegoDAO.getInstancia().grabarJuego(juego);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	private TipoCantoDTO buscarCanto(int idCanto) {
+		for(TipoCantoDTO t: cantos){
+			if(t.getIdTipoCanto()==idCanto)
+				return t;
+		}
+		return null;
+	}
+
+	public void jugarCarta(int idJuego, int idJugador, int idCarta) {
+		JuegoDTO juego = buscarJuego(idJuego);
+		if(juego !=null){
+			JugadorDTO jug = buscarJugadorPorId(idJugador);
+			if(jug!=null){
+				if(juego.validarTurno(jug)){ //Este método valida si el jugador pertenece al juego y es su turno
+					CartaDTO carta = buscarCarta(idCarta);
+						if(carta!=null){
+							if(juego.jugarCarta(carta, jug)){ //Este método valida si la carta existe en la mano del jugador y no ha sido jugada, y la juega si es correcto
+								System.out.println("\nEl jugador "+jug.getApodo()+" ha jugado la carta "+carta.getNumero()+" de "+carta.getPalo());
+								JuegoDAO.getInstancia().grabarJuego(juego);
+							}
+						}
+				}
+				else
+					System.out.println("\nNo es su turno.");
+			}
+			else
+				System.out.println("\nEl jugador no existe.");
+
+		}else
+			System.out.println("El juego no existe");
+		
+	}
+		
+
+	
+
+	private CartaDTO buscarCarta(int idCarta) {
+		for(CartaDTO c: cartas){
+			if(c.getIdCarta()==idCarta)
+				return c;
+		}
+		return null;
+	}
+
 	private List<CartaDTO> getCartasMezcladas() {
 		List<CartaDTO> cartasMezcladas = cartas;
 		Collections.shuffle(cartasMezcladas);
@@ -322,6 +444,14 @@ public class Controlador extends UnicastRemoteObject implements TDAManejoDatos {
 	public void envioJugador(JugadorDTO jugador) throws RemoteException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public List<TipoCantoDTO> getCantos() {
+		return cantos;
+	}
+
+	public void setCantos(List<TipoCantoDTO> cantos) {
+		this.cantos = cantos;
 	}
 
 

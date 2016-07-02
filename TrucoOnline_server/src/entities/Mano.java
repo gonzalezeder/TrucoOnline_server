@@ -16,8 +16,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 @Entity
 @Table (name = "Manos")
 public class Mano {
@@ -25,12 +29,14 @@ public class Mano {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int idMano;
 	
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name = "idMovimiento")
-	private List<Movimiento> movimientos = new ArrayList<Movimiento>();
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade= CascadeType.ALL)
+	@OrderBy("idMovimiento")
+	@JoinColumn(name = "idMano")
+	private List<Movimiento> movimientos;
 
 	
-	@OneToOne(cascade =CascadeType.ALL)
+	@OneToOne()
 	@JoinColumn(name="idEstado", referencedColumnName= "idEstado")
 	private Estado estado; 
 	
@@ -42,6 +48,12 @@ public class Mano {
 	
 	}
 	
+	public Mano(int idMano, List<Movimiento> movimientos, Estado estado) {
+		this.idMano = idMano;
+		this.movimientos = movimientos;
+		this.estado = estado;
+	}
+
 	public Mano(Baza baza){
 		this.movimientos = new ArrayList<Movimiento>();
 	
@@ -90,6 +102,14 @@ public class Mano {
 		Movimiento m = new Movimiento(j, null, c, -1);
 		movimientos.add(m);
 		
+	}
+
+	public int getIdMano() {
+		return idMano;
+	}
+
+	public void setIdMano(int idMano) {
+		this.idMano = idMano;
 	}
 	
 }
